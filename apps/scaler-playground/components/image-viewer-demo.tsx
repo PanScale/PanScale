@@ -22,6 +22,7 @@ export function ImageViewerDemo() {
   const [fitMode, setFitMode] = useState<FitMode>("fit");
   const [containerSize, setContainerSize] = useState({ w: 0, h: 0 });
   const [showDebug, setShowDebug] = useState(true);
+  const [forceCenter, setForceCenter] = useState(true);
   const [lastPinchCenter, setLastPinchCenter] = useState<{ x: number; y: number } | null>(null);
 
   const img = SAMPLE_IMAGES[imageIdx]!;
@@ -185,8 +186,8 @@ export function ImageViewerDemo() {
   const zoom = values?.zoom ?? 1;
   const scaledW = img.w * zoom;
   const scaledH = img.h * zoom;
-  const offsetX = scaledW < containerSize.w ? (containerSize.w - scaledW) / 2 : 0;
-  const offsetY = scaledH < containerSize.h ? (containerSize.h - scaledH) / 2 : 0;
+  const offsetX = forceCenter && scaledW < containerSize.w ? (containerSize.w - scaledW) / 2 : 0;
+  const offsetY = forceCenter && scaledH < containerSize.h ? (containerSize.h - scaledH) / 2 : 0;
 
   const tx = (values?.translateX ?? 0) + offsetX;
   const ty = (values?.translateY ?? 0) + offsetY;
@@ -262,6 +263,15 @@ export function ImageViewerDemo() {
         <button onClick={zoomIn} type="button" className="btn-ctrl">+</button>
         <button onClick={reset1to1} type="button" className="btn-ctrl">1:1</button>
         <div className="mx-2 h-6 w-px bg-gray-300 dark:bg-gray-600" />
+        <label className="flex items-center gap-1.5 text-sm cursor-pointer select-none">
+          <input
+            type="checkbox"
+            checked={forceCenter}
+            onChange={(e) => setForceCenter(e.target.checked)}
+            className="accent-indigo-500"
+          />
+          Center
+        </label>
         <label className="flex items-center gap-1.5 text-sm cursor-pointer select-none">
           <input
             type="checkbox"

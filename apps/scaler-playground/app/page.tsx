@@ -4,6 +4,7 @@ import { ImageViewerDemo } from "@/components/image-viewer-demo";
 import { GridCanvasDemo } from "@/components/grid-canvas-demo";
 import { CardsDemo } from "@/components/cards-demo";
 import { SnapPagingDemo } from "@/components/snap-paging-demo";
+import { WebGLDemo } from "@/components/webgl-demo";
 
 export default function PlaygroundPage() {
   return (
@@ -18,6 +19,7 @@ export default function PlaygroundPage() {
         <ImageViewerDemo />
         <GridCanvasDemo />
         <CardsDemo />
+        <WebGLDemo />
         <SnapPagingDemo />
       </div>
     </main>

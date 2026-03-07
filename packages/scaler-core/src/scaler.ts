@@ -184,16 +184,31 @@ export class Scaler {
 
     let currentTouchLeft: number;
     let currentTouchTop: number;
+    let lastMidX: number;
+    let lastMidY: number;
 
     if (touches.length === 1) {
       const t = touches[0]!;
       currentTouchLeft = t.pageX;
       currentTouchTop = t.pageY;
+      lastMidX = this.lastTouches[0]?.pageX ?? currentTouchLeft;
+      lastMidY = this.lastTouches[0]?.pageY ?? currentTouchTop;
     } else if (touches.length >= 2) {
       const t0 = touches[0]!;
       const t1 = touches[1]!;
       currentTouchLeft = (t0.pageX + t1.pageX) / 2;
       currentTouchTop = (t0.pageY + t1.pageY) / 2;
+
+      // Last midpoint for pan delta
+      if (this.lastTouches.length >= 2) {
+        const lt0 = this.lastTouches[0]!;
+        const lt1 = this.lastTouches[1]!;
+        lastMidX = (lt0.pageX + lt1.pageX) / 2;
+        lastMidY = (lt0.pageY + lt1.pageY) / 2;
+      } else {
+        lastMidX = this.lastTouches[0]?.pageX ?? currentTouchLeft;
+        lastMidY = this.lastTouches[0]?.pageY ?? currentTouchTop;
+      }
 
       // Pinch zoom
       if (this.options.zooming && this.lastTouches.length >= 2) {
@@ -228,12 +243,12 @@ export class Scaler {
       }
     }
 
-    // Pan
-    const deltaX = currentTouchLeft - (this.lastTouches[0]?.pageX ?? currentTouchLeft);
-    const deltaY = currentTouchTop - (this.lastTouches.length >= 2
-      ? (this.lastTouches[0]!.pageY + this.lastTouches[1]!.pageY) / 2
-      : this.lastTouches[0]?.pageY ?? currentTouchTop);
+    // Pan — use midpoint delta (correct for both 1-finger and 2-finger)
+    const deltaX = currentTouchLeft - lastMidX;
+    const deltaY = currentTouchTop - lastMidY;
 
+    // For pinch zoom, applyZoom already adjusted the scroll position to keep
+    // the origin fixed. We still apply the pan delta so 2-finger drag works.
     const { scrollLeft, scrollTop } = this.getDecomposed();
     let newScrollLeft = scrollLeft;
     let newScrollTop = scrollTop;

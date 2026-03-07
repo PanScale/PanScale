@@ -21,6 +21,8 @@ export function ImageViewerDemo() {
   const [imageIdx, setImageIdx] = useState(0);
   const [fitMode, setFitMode] = useState<FitMode>("fit");
   const [containerSize, setContainerSize] = useState({ w: 0, h: 0 });
+  const [showDebug, setShowDebug] = useState(true);
+  const [lastPinchCenter, setLastPinchCenter] = useState<{ x: number; y: number } | null>(null);
 
   const img = SAMPLE_IMAGES[imageIdx]!;
 
@@ -39,6 +41,55 @@ export function ImageViewerDemo() {
     },
     [img.w, img.h]
   );
+
+  // Track pointer positions for debug crosshair
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const pointers = new Map<number, { x: number; y: number }>();
+
+    const onPointerDown = (e: PointerEvent) => {
+      const rect = el.getBoundingClientRect();
+      pointers.set(e.pointerId, { x: e.clientX - rect.left, y: e.clientY - rect.top });
+      updateCenter();
+    };
+    const onPointerMove = (e: PointerEvent) => {
+      if (!pointers.has(e.pointerId)) return;
+      const rect = el.getBoundingClientRect();
+      pointers.set(e.pointerId, { x: e.clientX - rect.left, y: e.clientY - rect.top });
+      updateCenter();
+    };
+    const onPointerUp = (e: PointerEvent) => {
+      pointers.delete(e.pointerId);
+      if (pointers.size === 0) setLastPinchCenter(null);
+      else updateCenter();
+    };
+
+    function updateCenter() {
+      if (pointers.size >= 2) {
+        const pts = Array.from(pointers.values());
+        const cx = pts.reduce((s, p) => s + p.x, 0) / pts.length;
+        const cy = pts.reduce((s, p) => s + p.y, 0) / pts.length;
+        setLastPinchCenter({ x: cx, y: cy });
+      } else if (pointers.size === 1) {
+        const p = Array.from(pointers.values())[0]!;
+        setLastPinchCenter({ x: p.x, y: p.y });
+      }
+    }
+
+    el.addEventListener("pointerdown", onPointerDown);
+    document.addEventListener("pointermove", onPointerMove);
+    document.addEventListener("pointerup", onPointerUp);
+    document.addEventListener("pointercancel", onPointerUp);
+
+    return () => {
+      el.removeEventListener("pointerdown", onPointerDown);
+      document.removeEventListener("pointermove", onPointerMove);
+      document.removeEventListener("pointerup", onPointerUp);
+      document.removeEventListener("pointercancel", onPointerUp);
+    };
+  }, []);
 
   // Initialize scaler
   useEffect(() => {
@@ -140,6 +191,20 @@ export function ImageViewerDemo() {
   const tx = (values?.translateX ?? 0) + offsetX;
   const ty = (values?.translateY ?? 0) + offsetY;
 
+  // Debug: image border corners in viewport space
+  const imgLeft = tx;
+  const imgTop = ty;
+  const imgRight = tx + scaledW;
+  const imgBottom = ty + scaledH;
+
+  // Debug: viewport center
+  const vpCenterX = containerSize.w / 2;
+  const vpCenterY = containerSize.h / 2;
+
+  // Debug: image center in viewport space
+  const imgCenterX = imgLeft + scaledW / 2;
+  const imgCenterY = imgTop + scaledH / 2;
+
   return (
     <section>
       <h2 className="mb-2 text-lg font-semibold">Image Viewer</h2>
@@ -196,6 +261,16 @@ export function ImageViewerDemo() {
         </span>
         <button onClick={zoomIn} type="button" className="btn-ctrl">+</button>
         <button onClick={reset1to1} type="button" className="btn-ctrl">1:1</button>
+        <div className="mx-2 h-6 w-px bg-gray-300 dark:bg-gray-600" />
+        <label className="flex items-center gap-1.5 text-sm cursor-pointer select-none">
+          <input
+            type="checkbox"
+            checked={showDebug}
+            onChange={(e) => setShowDebug(e.target.checked)}
+            className="accent-red-500"
+          />
+          Debug
+        </label>
       </div>
 
       {/* Viewer */}
@@ -219,6 +294,8 @@ export function ImageViewerDemo() {
             opacity: 0.3,
           }}
         />
+
+        {/* Content layer */}
         <div
           style={{
             transform: `translate(${tx}px, ${ty}px) scale(${zoom})`,
@@ -233,10 +310,82 @@ export function ImageViewerDemo() {
             alt={img.label}
             width={img.w}
             height={img.h}
-            style={{ display: "block", imageRendering: "auto" }}
+            style={{ display: "block", maxWidth: "none", imageRendering: "auto" }}
             draggable={false}
           />
         </div>
+
+        {/* Debug overlays — rendered in viewport space (not transformed) */}
+        {showDebug && (
+          <svg
+            className="absolute inset-0 pointer-events-none"
+            width={containerSize.w}
+            height={containerSize.h}
+            style={{ zIndex: 10 }}
+          >
+            {/* Image border — red dashed rectangle */}
+            <rect
+              x={imgLeft}
+              y={imgTop}
+              width={scaledW}
+              height={scaledH}
+              fill="none"
+              stroke="#ef4444"
+              strokeWidth={2}
+              strokeDasharray="8 4"
+              opacity={0.9}
+            />
+            {/* Image border corner labels */}
+            <text x={imgLeft + 4} y={imgTop + 14} fill="#ef4444" fontSize={11} fontFamily="monospace">
+              img(0,0)
+            </text>
+            <text x={imgRight - 70} y={imgBottom - 4} fill="#ef4444" fontSize={11} fontFamily="monospace">
+              img({img.w},{img.h})
+            </text>
+
+            {/* Image center — red + */}
+            <line x1={imgCenterX - 12} y1={imgCenterY} x2={imgCenterX + 12} y2={imgCenterY} stroke="#ef4444" strokeWidth={2} />
+            <line x1={imgCenterX} y1={imgCenterY - 12} x2={imgCenterX} y2={imgCenterY + 12} stroke="#ef4444" strokeWidth={2} />
+            <text x={imgCenterX + 6} y={imgCenterY - 6} fill="#ef4444" fontSize={10} fontFamily="monospace">
+              img center
+            </text>
+
+            {/* Viewport center — green + */}
+            <line x1={vpCenterX - 20} y1={vpCenterY} x2={vpCenterX + 20} y2={vpCenterY} stroke="#22c55e" strokeWidth={2} />
+            <line x1={vpCenterX} y1={vpCenterY - 20} x2={vpCenterX} y2={vpCenterY + 20} stroke="#22c55e" strokeWidth={2} />
+            <text x={vpCenterX + 8} y={vpCenterY - 8} fill="#22c55e" fontSize={10} fontFamily="monospace">
+              viewport center
+            </text>
+
+            {/* Pinch/touch center — yellow crosshair */}
+            {lastPinchCenter && (
+              <>
+                <line
+                  x1={lastPinchCenter.x - 30} y1={lastPinchCenter.y}
+                  x2={lastPinchCenter.x + 30} y2={lastPinchCenter.y}
+                  stroke="#eab308" strokeWidth={2}
+                />
+                <line
+                  x1={lastPinchCenter.x} y1={lastPinchCenter.y - 30}
+                  x2={lastPinchCenter.x} y2={lastPinchCenter.y + 30}
+                  stroke="#eab308" strokeWidth={2}
+                />
+                <circle
+                  cx={lastPinchCenter.x} cy={lastPinchCenter.y} r={6}
+                  fill="none" stroke="#eab308" strokeWidth={2}
+                />
+                <text x={lastPinchCenter.x + 10} y={lastPinchCenter.y - 10} fill="#eab308" fontSize={10} fontFamily="monospace">
+                  zoom origin ({Math.round(lastPinchCenter.x)},{Math.round(lastPinchCenter.y)})
+                </text>
+              </>
+            )}
+
+            {/* Element position indicator */}
+            <text x={4} y={containerSize.h - 6} fill="#94a3b8" fontSize={10} fontFamily="monospace">
+              container: {containerSize.w.toFixed(0)}×{containerSize.h.toFixed(0)} | offset: ({offsetX.toFixed(0)},{offsetY.toFixed(0)}) | tx,ty: ({tx.toFixed(0)},{ty.toFixed(0)})
+            </text>
+          </svg>
+        )}
       </div>
 
       {/* Info bar */}
@@ -245,7 +394,17 @@ export function ImageViewerDemo() {
           <span className="mr-4">Image: {img.w}×{img.h}</span>
           <span className="mr-4">Zoom: {(zoom * 100).toFixed(0)}%</span>
           <span className="mr-4">Scroll: ({values.scrollLeft.toFixed(0)}, {values.scrollTop.toFixed(0)})</span>
-          <span>Translate: ({values.translateX.toFixed(0)}, {values.translateY.toFixed(0)})</span>
+          <span className="mr-4">Translate: ({values.translateX.toFixed(0)}, {values.translateY.toFixed(0)})</span>
+          <span className="mr-4">Centering offset: ({offsetX.toFixed(0)}, {offsetY.toFixed(0)})</span>
+        </div>
+      )}
+
+      {/* Debug legend */}
+      {showDebug && (
+        <div className="mt-1 flex flex-wrap gap-4 text-xs">
+          <span className="flex items-center gap-1"><span className="inline-block h-3 w-3 rounded-sm bg-red-500" /> Image border & center</span>
+          <span className="flex items-center gap-1"><span className="inline-block h-3 w-3 rounded-sm bg-green-500" /> Viewport center</span>
+          <span className="flex items-center gap-1"><span className="inline-block h-3 w-3 rounded-sm bg-yellow-500" /> Zoom origin (touch/pinch)</span>
         </div>
       )}
     </section>

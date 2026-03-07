@@ -92,6 +92,15 @@ export function ImageViewerDemo() {
     };
   }, []);
 
+  function getCenterScroll(cw: number, ch: number, zoom: number) {
+    const scaledW = img.w * zoom;
+    const scaledH = img.h * zoom;
+    return {
+      scrollLeft: scaledW > cw ? (scaledW - cw) / 2 : -(cw - scaledW) / 2,
+      scrollTop: scaledH > ch ? (scaledH - ch) / 2 : -(ch - scaledH) / 2,
+    };
+  }
+
   // Initialize scaler
   useEffect(() => {
     const el = containerRef.current;
@@ -117,8 +126,8 @@ export function ImageViewerDemo() {
     webScalerRef.current = ws;
 
     // Set initial zoom and center
-    ws.scaler.zoomTo(initZoom);
-    centerContent(ws.scaler, cw, ch, initZoom);
+    const { scrollLeft, scrollTop } = getCenterScroll(cw, ch, initZoom);
+    ws.scaler.scrollToWithZoom(scrollLeft, scrollTop, initZoom);
 
     const ro = new ResizeObserver((entries) => {
       for (const entry of entries) {
@@ -135,14 +144,6 @@ export function ImageViewerDemo() {
     };
   }, [imageIdx]);
 
-  function centerContent(scaler: Scaler, cw: number, ch: number, zoom: number) {
-    const scaledW = img.w * zoom;
-    const scaledH = img.h * zoom;
-    const scrollLeft = scaledW > cw ? (scaledW - cw) / 2 : -(cw - scaledW) / 2;
-    const scrollTop = scaledH > ch ? (scaledH - ch) / 2 : -(ch - scaledH) / 2;
-    scaler.scrollTo(scrollLeft, scrollTop);
-  }
-
   const applyFit = useCallback(() => {
     const ws = webScalerRef.current;
     if (!ws) return;
@@ -150,8 +151,8 @@ export function ImageViewerDemo() {
     const cw = containerSize.w || containerRef.current?.getBoundingClientRect().width || 0;
     const ch = containerSize.h || containerRef.current?.getBoundingClientRect().height || 0;
     const zoom = calcFitZoom(cw, ch);
-    ws.scaler.zoomTo(zoom, true);
-    setTimeout(() => centerContent(ws.scaler, cw, ch, zoom), 280);
+    const { scrollLeft, scrollTop } = getCenterScroll(cw, ch, zoom);
+    ws.scaler.scrollToWithZoom(scrollLeft, scrollTop, zoom, true);
   }, [containerSize, calcFitZoom, img.w, img.h]);
 
   const applyFill = useCallback(() => {
@@ -161,8 +162,8 @@ export function ImageViewerDemo() {
     const cw = containerSize.w || containerRef.current?.getBoundingClientRect().width || 0;
     const ch = containerSize.h || containerRef.current?.getBoundingClientRect().height || 0;
     const zoom = calcFillZoom(cw, ch);
-    ws.scaler.zoomTo(zoom, true);
-    setTimeout(() => centerContent(ws.scaler, cw, ch, zoom), 280);
+    const { scrollLeft, scrollTop } = getCenterScroll(cw, ch, zoom);
+    ws.scaler.scrollToWithZoom(scrollLeft, scrollTop, zoom, true);
   }, [containerSize, calcFillZoom, img.w, img.h]);
 
   const reset1to1 = useCallback(() => {
@@ -170,8 +171,8 @@ export function ImageViewerDemo() {
     if (!ws) return;
     const cw = containerSize.w || containerRef.current?.getBoundingClientRect().width || 0;
     const ch = containerSize.h || containerRef.current?.getBoundingClientRect().height || 0;
-    ws.scaler.zoomTo(1, true);
-    setTimeout(() => centerContent(ws.scaler, cw, ch, 1), 280);
+    const { scrollLeft, scrollTop } = getCenterScroll(cw, ch, 1);
+    ws.scaler.scrollToWithZoom(scrollLeft, scrollTop, 1, true);
   }, [containerSize, img.w, img.h]);
 
   const zoomIn = useCallback(() => {
@@ -186,11 +187,16 @@ export function ImageViewerDemo() {
   const zoom = values?.zoom ?? 1;
   const scaledW = img.w * zoom;
   const scaledH = img.h * zoom;
-  const offsetX = forceCenter && scaledW < containerSize.w ? (containerSize.w - scaledW) / 2 : 0;
-  const offsetY = forceCenter && scaledH < containerSize.h ? (containerSize.h - scaledH) / 2 : 0;
-
-  const tx = (values?.translateX ?? 0) + offsetX;
-  const ty = (values?.translateY ?? 0) + offsetY;
+  // When center is forced and content is smaller than viewport on an axis,
+  // lock to centered position (ignore scaler scroll on that axis).
+  // When center is off, use the scaler's translateX/Y directly — the scaler's
+  // scroll bounds allow free positioning within the viewport.
+  const tx = forceCenter && scaledW < containerSize.w
+    ? (containerSize.w - scaledW) / 2
+    : (values?.translateX ?? 0);
+  const ty = forceCenter && scaledH < containerSize.h
+    ? (containerSize.h - scaledH) / 2
+    : (values?.translateY ?? 0);
 
   // Debug: image border corners in viewport space
   const imgLeft = tx;
@@ -392,7 +398,7 @@ export function ImageViewerDemo() {
 
             {/* Element position indicator */}
             <text x={4} y={containerSize.h - 6} fill="#94a3b8" fontSize={10} fontFamily="monospace">
-              container: {containerSize.w.toFixed(0)}×{containerSize.h.toFixed(0)} | offset: ({offsetX.toFixed(0)},{offsetY.toFixed(0)}) | tx,ty: ({tx.toFixed(0)},{ty.toFixed(0)})
+              container: {containerSize.w.toFixed(0)}×{containerSize.h.toFixed(0)} | center: {forceCenter ? "on" : "off"} | tx,ty: ({tx.toFixed(0)},{ty.toFixed(0)})
             </text>
           </svg>
         )}
@@ -405,7 +411,7 @@ export function ImageViewerDemo() {
           <span className="mr-4">Zoom: {(zoom * 100).toFixed(0)}%</span>
           <span className="mr-4">Scroll: ({values.scrollLeft.toFixed(0)}, {values.scrollTop.toFixed(0)})</span>
           <span className="mr-4">Translate: ({values.translateX.toFixed(0)}, {values.translateY.toFixed(0)})</span>
-          <span className="mr-4">Centering offset: ({offsetX.toFixed(0)}, {offsetY.toFixed(0)})</span>
+          <span className="mr-4">Center: {forceCenter ? "locked" : "free"}</span>
         </div>
       )}
 

@@ -134,6 +134,18 @@ export class Scaler {
     this.zoomTo(this.getCurrentZoom() * factor, animate, originX, originY);
   }
 
+  /** Animate to a target scroll position AND zoom level in a single motion. */
+  scrollToWithZoom(left: number, top: number, zoom: number, animate = false): void {
+    const clamped = clampZoom(zoom, this.options);
+    if (animate && this.options.animating) {
+      this.animateScrollTo(left, top, clamped);
+    } else {
+      this.applyZoom(clamped);
+      this.setScrollPosition(left, top);
+      this.clampAndPublish();
+    }
+  }
+
   /** Get current decomposed transform values. */
   getValues(): ScalerValues {
     return this.decompose();

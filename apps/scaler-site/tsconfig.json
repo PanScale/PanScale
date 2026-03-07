@@ -1,0 +1,19 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "lib": ["ES2022", "DOM"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "allowJs": false,
+    "noEmit": true,
+    "types": ["node"],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"],
+      "fumadocs-mdx:collections/server": ["./.source/server.ts"]
+    }
+  },
+  "include": ["app", "components", "content", "lib", "mdx-components.tsx", "source.config.ts", "next-env.d.ts", ".source"],
+  "exclude": ["node_modules"]
+}

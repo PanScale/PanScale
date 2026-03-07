@@ -1,0 +1,13 @@
+services:
+  newt:
+    image: fosrl/newt
+    restart: unless-stopped
+    environment:
+      - PANGOLIN_ENDPOINT=https://pangolin.pg.yatsyk.com
+      - NEWT_ID=${NEWT_ID}
+      - NEWT_SECRET=${NEWT_SECRET}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    # Resources configured in Pangolin:
+    # scaler-site.pg.yatsyk.com → host.docker.internal:7790
+    # scaler-playground.pg.yatsyk.com → host.docker.internal:7791

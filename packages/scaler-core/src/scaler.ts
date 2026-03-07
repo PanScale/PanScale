@@ -263,13 +263,13 @@ export class Scaler {
     // Bouncing: allow over-scroll with resistance
     const bounds = getScrollBounds(this.dimensions, this.getCurrentZoom());
     if (this.options.bouncing) {
-      if (newScrollLeft < 0) {
-        newScrollLeft *= 0.5;
+      if (newScrollLeft < bounds.minScrollLeft) {
+        newScrollLeft = bounds.minScrollLeft + (newScrollLeft - bounds.minScrollLeft) * 0.5;
       } else if (newScrollLeft > bounds.maxScrollLeft) {
         newScrollLeft = bounds.maxScrollLeft + (newScrollLeft - bounds.maxScrollLeft) * 0.5;
       }
-      if (newScrollTop < 0) {
-        newScrollTop *= 0.5;
+      if (newScrollTop < bounds.minScrollTop) {
+        newScrollTop = bounds.minScrollTop + (newScrollTop - bounds.minScrollTop) * 0.5;
       } else if (newScrollTop > bounds.maxScrollTop) {
         newScrollTop = bounds.maxScrollTop + (newScrollTop - bounds.maxScrollTop) * 0.5;
       }
@@ -306,12 +306,12 @@ export class Scaler {
     const bounds = getScrollBounds(this.dimensions, this.getCurrentZoom());
 
     // Check if we need to bounce back
-    const needsBounceX = scrollLeft < 0 || scrollLeft > bounds.maxScrollLeft;
-    const needsBounceY = scrollTop < 0 || scrollTop > bounds.maxScrollTop;
+    const needsBounceX = scrollLeft < bounds.minScrollLeft || scrollLeft > bounds.maxScrollLeft;
+    const needsBounceY = scrollTop < bounds.minScrollTop || scrollTop > bounds.maxScrollTop;
 
     if (needsBounceX || needsBounceY) {
-      const targetX = Math.max(0, Math.min(scrollLeft, bounds.maxScrollLeft));
-      const targetY = Math.max(0, Math.min(scrollTop, bounds.maxScrollTop));
+      const targetX = Math.max(bounds.minScrollLeft, Math.min(scrollLeft, bounds.maxScrollLeft));
+      const targetY = Math.max(bounds.minScrollTop, Math.min(scrollTop, bounds.maxScrollTop));
       if (this.options.bouncing) {
         startBounce(this.bounce, scrollLeft, scrollTop, targetX, targetY);
         this.startAnimationLoop();
@@ -465,16 +465,16 @@ export class Scaler {
         const bounds = getScrollBounds(this.dimensions, this.getCurrentZoom());
 
         // Check bounds — if exceeded, start bounce
-        if (newScrollLeft < 0 || newScrollLeft > bounds.maxScrollLeft ||
-            newScrollTop < 0 || newScrollTop > bounds.maxScrollTop) {
+        if (newScrollLeft < bounds.minScrollLeft || newScrollLeft > bounds.maxScrollLeft ||
+            newScrollTop < bounds.minScrollTop || newScrollTop > bounds.maxScrollTop) {
           stopMomentum(this.momentum);
           if (this.options.bouncing) {
-            const targetX = Math.max(0, Math.min(newScrollLeft, bounds.maxScrollLeft));
-            const targetY = Math.max(0, Math.min(newScrollTop, bounds.maxScrollTop));
+            const targetX = Math.max(bounds.minScrollLeft, Math.min(newScrollLeft, bounds.maxScrollLeft));
+            const targetY = Math.max(bounds.minScrollTop, Math.min(newScrollTop, bounds.maxScrollTop));
             startBounce(this.bounce, newScrollLeft, newScrollTop, targetX, targetY);
           } else {
-            newScrollLeft = Math.max(0, Math.min(newScrollLeft, bounds.maxScrollLeft));
-            newScrollTop = Math.max(0, Math.min(newScrollTop, bounds.maxScrollTop));
+            newScrollLeft = Math.max(bounds.minScrollLeft, Math.min(newScrollLeft, bounds.maxScrollLeft));
+            newScrollTop = Math.max(bounds.minScrollTop, Math.min(newScrollTop, bounds.maxScrollTop));
           }
         }
 

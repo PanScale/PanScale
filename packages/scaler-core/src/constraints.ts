@@ -10,11 +10,20 @@ export function clampZoom(zoom: number, options: ScalerOptions): number {
   return clamp(zoom, options.minZoom, options.maxZoom);
 }
 
-/** Get the maximum scroll values for current dimensions and zoom. */
+/** Get the scroll bounds for current dimensions and zoom. */
 export function getScrollBounds(dimensions: Dimensions, zoom: number) {
-  const maxScrollLeft = Math.max(0, dimensions.contentWidth * zoom - dimensions.clientWidth);
-  const maxScrollTop = Math.max(0, dimensions.contentHeight * zoom - dimensions.clientHeight);
-  return { maxScrollLeft, maxScrollTop };
+  const scaledW = dimensions.contentWidth * zoom;
+  const scaledH = dimensions.contentHeight * zoom;
+
+  // When content is larger than viewport: scroll 0..overflow
+  // When content is smaller than viewport: allow negative scroll so
+  // content can be positioned anywhere while remaining fully visible.
+  const minScrollLeft = scaledW < dimensions.clientWidth ? -(dimensions.clientWidth - scaledW) : 0;
+  const maxScrollLeft = scaledW < dimensions.clientWidth ? 0 : scaledW - dimensions.clientWidth;
+  const minScrollTop = scaledH < dimensions.clientHeight ? -(dimensions.clientHeight - scaledH) : 0;
+  const maxScrollTop = scaledH < dimensions.clientHeight ? 0 : scaledH - dimensions.clientHeight;
+
+  return { minScrollLeft, maxScrollLeft, minScrollTop, maxScrollTop };
 }
 
 /** Clamp scroll position to valid bounds. */
@@ -26,8 +35,8 @@ export function clampScroll(
 ) {
   const bounds = getScrollBounds(dimensions, zoom);
   return {
-    scrollLeft: clamp(scrollLeft, 0, bounds.maxScrollLeft),
-    scrollTop: clamp(scrollTop, 0, bounds.maxScrollTop)
+    scrollLeft: clamp(scrollLeft, bounds.minScrollLeft, bounds.maxScrollLeft),
+    scrollTop: clamp(scrollTop, bounds.minScrollTop, bounds.maxScrollTop)
   };
 }
 

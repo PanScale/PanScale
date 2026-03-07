@@ -22,24 +22,37 @@ export function attachPointerEvents(element: HTMLElement, scaler: Scaler): () =>
   };
 
   const onPointerUp = (e: PointerEvent) => {
+    if (!activePointers.has(e.pointerId)) return;
     activePointers.delete(e.pointerId);
     if (activePointers.size === 0) {
       scaler.doTouchEnd(e.timeStamp);
     } else {
       scaler.doTouchStart(getTouches(), e.timeStamp);
     }
-    e.preventDefault();
   };
 
+  const onLostCapture = (e: PointerEvent) => {
+    if (!activePointers.has(e.pointerId)) return;
+    activePointers.delete(e.pointerId);
+    if (activePointers.size === 0) {
+      scaler.doTouchEnd(e.timeStamp);
+    }
+  };
+
+  // pointerdown on element to start tracking
   element.addEventListener("pointerdown", onPointerDown);
-  element.addEventListener("pointermove", onPointerMove);
-  element.addEventListener("pointerup", onPointerUp);
-  element.addEventListener("pointercancel", onPointerUp);
+  // move/up on document to catch events when cursor leaves element
+  document.addEventListener("pointermove", onPointerMove);
+  document.addEventListener("pointerup", onPointerUp);
+  document.addEventListener("pointercancel", onPointerUp);
+  // fallback: if pointer capture is lost, treat as end
+  element.addEventListener("lostpointercapture", onLostCapture);
 
   return () => {
     element.removeEventListener("pointerdown", onPointerDown);
-    element.removeEventListener("pointermove", onPointerMove);
-    element.removeEventListener("pointerup", onPointerUp);
-    element.removeEventListener("pointercancel", onPointerUp);
+    document.removeEventListener("pointermove", onPointerMove);
+    document.removeEventListener("pointerup", onPointerUp);
+    document.removeEventListener("pointercancel", onPointerUp);
+    element.removeEventListener("lostpointercapture", onLostCapture);
   };
 }

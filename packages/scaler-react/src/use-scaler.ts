@@ -2,6 +2,11 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Scaler, type ScalerOptions, type ScalerValues } from "@scaler/core";
 import { createWebScaler, type WebScaler } from "@scaler/web";
 
+export interface UseScalerOptions extends Partial<ScalerOptions> {
+  contentWidth?: number;
+  contentHeight?: number;
+}
+
 export interface UseScalerReturn {
   ref: React.RefObject<HTMLDivElement | null>;
   values: ScalerValues;
@@ -9,6 +14,7 @@ export interface UseScalerReturn {
   scrollBy: (dx: number, dy: number, animate?: boolean) => void;
   zoomTo: (level: number, animate?: boolean, originX?: number, originY?: number) => void;
   zoomBy: (factor: number, animate?: boolean, originX?: number, originY?: number) => void;
+  setContentSize: (width: number, height: number) => void;
 }
 
 const defaultValues: ScalerValues = {
@@ -20,18 +26,25 @@ const defaultValues: ScalerValues = {
   scrollTop: 0
 };
 
-export function useScaler(options?: Partial<ScalerOptions>): UseScalerReturn {
+export function useScaler(options?: UseScalerOptions): UseScalerReturn {
   const ref = useRef<HTMLDivElement | null>(null);
   const webScalerRef = useRef<WebScaler | null>(null);
   const [values, setValues] = useState<ScalerValues>(defaultValues);
+  const optionsRef = useRef(options);
+  optionsRef.current = options;
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
 
+    const opts = optionsRef.current;
+    const { contentWidth, contentHeight, ...scalerOpts } = opts ?? {};
+
     const webScaler = createWebScaler(el, {
       callback: setValues,
-      ...options
+      contentWidth,
+      contentHeight,
+      ...scalerOpts
     });
     webScalerRef.current = webScaler;
 
@@ -57,5 +70,9 @@ export function useScaler(options?: Partial<ScalerOptions>): UseScalerReturn {
     webScalerRef.current?.scaler.zoomBy(factor, animate, originX, originY);
   }, []);
 
-  return { ref, values, scrollTo, scrollBy, zoomTo, zoomBy };
+  const setContentSize = useCallback((width: number, height: number) => {
+    webScalerRef.current?.updateContentSize(width, height);
+  }, []);
+
+  return { ref, values, scrollTo, scrollBy, zoomTo, zoomBy, setContentSize };
 }

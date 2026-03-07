@@ -139,6 +139,11 @@ export class Scaler {
     return this.decompose();
   }
 
+  /** Get current dimensions. */
+  getDimensions(): Dimensions {
+    return { ...this.dimensions };
+  }
+
   /** Handle platform-agnostic touch start. */
   doTouchStart(touches: ScalerTouch[], timeStamp: number): void {
     if (this.destroyed) return;

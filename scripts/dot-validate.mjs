@@ -1,6 +1,6 @@
 import pc from "picocolors";
 
-import { loadDot } from "../packages/scaler-config/dist/index.js";
+import { loadDot } from "../packages/panscale-config/dist/index.js";
 
 try {
   const dot = loadDot();

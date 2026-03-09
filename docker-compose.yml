@@ -8,6 +8,5 @@ services:
       - NEWT_SECRET=${NEWT_SECRET}
     extra_hosts:
       - "host.docker.internal:host-gateway"
-    # Resources configured in Pangolin:
-    # scaler-site.pg.yatsyk.com → host.docker.internal:7790
-    # scaler-playground.pg.yatsyk.com → host.docker.internal:7791
+    # Resource configured in Pangolin:
+    # panscale.pg.yatsyk.com → host.docker.internal:7780

@@ -2,7 +2,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 
 import pc from "picocolors";
-import { loadDot } from "../packages/scaler-config/dist/index.js";
+import { loadDot } from "../packages/panscale-config/dist/index.js";
 
 const dot = loadDot();
 const cwd = process.cwd();

@@ -1,0 +1,39 @@
+---
+title: Getting Started
+description: "Getting started with @panscale/core."
+---
+
+Install the package:
+
+```bash
+pnpm add @panscale/core transformation-matrix
+```
+
+## Basic Usage
+
+```typescript
+import { Scaler } from "@panscale/core";
+
+const scaler = new Scaler((values) => {
+  console.log("scroll:", values.scrollLeft, values.scrollTop);
+  console.log("zoom:", values.zoom);
+});
+
+scaler.setDimensions(800, 600, 2000, 1500);
+
+// Programmatic scroll
+scaler.scrollTo(100, 50, true);
+
+// Programmatic zoom
+scaler.zoomTo(1.5, true, 400, 300);
+```
+
+## Platform-agnostic Touch Input
+
+Feed touch events from any platform:
+
+```typescript
+scaler.doTouchStart([{ pageX: 100, pageY: 200 }], Date.now());
+scaler.doTouchMove([{ pageX: 120, pageY: 210 }], Date.now());
+scaler.doTouchEnd(Date.now());
+```

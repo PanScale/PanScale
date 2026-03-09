@@ -1,0 +1,26 @@
+---
+title: Getting Started
+description: "Getting started with @panscale/react."
+---
+
+Install the packages:
+
+```bash
+pnpm add @panscale/core @panscale/web @panscale/react transformation-matrix
+```
+
+## Quick Start
+
+```tsx
+import { ScalerView } from "@panscale/react";
+
+function App() {
+  return (
+    <ScalerView style={{ width: "100%", height: 400 }} zooming bouncing>
+      <div style={{ width: 2000, height: 1500 }}>
+        <h1>Pan and zoom me!</h1>
+      </div>
+    </ScalerView>
+  );
+}
+```

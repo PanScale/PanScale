@@ -1,0 +1,29 @@
+---
+title: Getting Started
+description: "Getting started with @panscale/react-native."
+---
+
+Install the packages:
+
+```bash
+pnpm add @panscale/core @panscale/react-native transformation-matrix
+```
+
+## Quick Start
+
+```tsx
+import { ScalerView } from "@panscale/react-native";
+
+function App() {
+  return (
+    <ScalerView
+      style={{ flex: 1 }}
+      contentWidth={2000}
+      contentHeight={1500}
+      options={{ zooming: true, bouncing: true }}
+    >
+      {/* Your content here */}
+    </ScalerView>
+  );
+}
+```

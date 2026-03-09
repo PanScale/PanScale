@@ -1,0 +1,33 @@
+---
+title: API
+description: "@panscale/react-native API reference."
+---
+
+# API
+
+## ScalerView
+
+```tsx
+<ScalerView
+  contentWidth={number}
+  contentHeight={number}
+  options?: Partial<ScalerOptions>
+  onValuesChange?: (values: ScalerValues) => void
+  style?: ViewStyle
+>
+  {children}
+</ScalerView>
+```
+
+## Components
+
+- `<ZoomControls>` — +/- zoom buttons
+- `<ResetButton>` — Reset zoom to 1:1
+
+## createNativeAdapter
+
+```typescript
+function createNativeAdapter(scaler: Scaler): PanResponderInstance
+```
+
+Low-level adapter mapping PanResponder gestures to Panscale's touch API.

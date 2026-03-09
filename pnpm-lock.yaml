@@ -39,54 +39,20 @@ importers:
         specifier: ^3.24.1
         version: 3.25.76
 
-  apps/scaler-playground:
+  apps/panscale-site:
     dependencies:
-      '@scaler/core':
+      '@panscale/config':
         specifier: workspace:*
-        version: link:../../packages/scaler-core
-      '@scaler/react':
+        version: link:../../packages/panscale-config
+      '@panscale/core':
         specifier: workspace:*
-        version: link:../../packages/scaler-react
-      '@scaler/web':
+        version: link:../../packages/panscale-core
+      '@panscale/react':
         specifier: workspace:*
-        version: link:../../packages/scaler-web
-      next:
-        specifier: ^16.0.0
-        version: 16.1.6(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
-      react:
-        specifier: ^19.0.0
-        version: 19.2.4
-      react-dom:
-        specifier: ^19.0.0
-        version: 19.2.4(react@19.2.4)
-      transformation-matrix:
-        specifier: ^3.0.0
-        version: 3.1.0
-      typescript:
-        specifier: ^5.7.3
-        version: 5.9.3
-    devDependencies:
-      '@tailwindcss/postcss':
-        specifier: ^4.0.0
-        version: 4.2.1
-      '@types/node':
-        specifier: ^22.10.2
-        version: 22.19.15
-      '@types/react':
-        specifier: ^19.0.0
-        version: 19.2.14
-      postcss:
-        specifier: ^8.4.47
-        version: 8.5.8
-      tailwindcss:
-        specifier: ^4.0.0
-        version: 4.2.1
-
-  apps/scaler-site:
-    dependencies:
-      '@scaler/config':
+        version: link:../../packages/panscale-react
+      '@panscale/web':
         specifier: workspace:*
-        version: link:../../packages/scaler-config
+        version: link:../../packages/panscale-web
       fumadocs-core:
         specifier: ^16.4.9
         version: 16.6.10(@mdx-js/mdx@3.1.1)(@types/estree-jsx@1.0.5)(@types/hast@3.0.4)(@types/mdast@4.0.4)(@types/react@19.2.14)(lucide-react@0.577.0(react@19.2.4))(next@16.1.6(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(zod@4.3.6)
@@ -105,6 +71,9 @@ importers:
       react-dom:
         specifier: ^19.0.0
         version: 19.2.4(react@19.2.4)
+      transformation-matrix:
+        specifier: ^3.0.0
+        version: 3.1.0
       typescript:
         specifier: ^5.7.3
         version: 5.9.3
@@ -128,7 +97,7 @@ importers:
         specifier: ^4.0.0
         version: 4.2.1
 
-  packages/scaler-config:
+  packages/panscale-config:
     dependencies:
       zod:
         specifier: ^3.24.1
@@ -144,7 +113,7 @@ importers:
         specifier: ^5.7.3
         version: 5.9.3
 
-  packages/scaler-core:
+  packages/panscale-core:
     devDependencies:
       '@arethetypeswrong/cli':
         specifier: ^0.17.4
@@ -162,17 +131,17 @@ importers:
         specifier: ^5.7.3
         version: 5.9.3
 
-  packages/scaler-react:
+  packages/panscale-react:
     devDependencies:
       '@arethetypeswrong/cli':
         specifier: ^0.17.4
         version: 0.17.4
-      '@scaler/core':
+      '@panscale/core':
         specifier: workspace:*
-        version: link:../scaler-core
-      '@scaler/web':
+        version: link:../panscale-core
+      '@panscale/web':
         specifier: workspace:*
-        version: link:../scaler-web
+        version: link:../panscale-web
       '@types/react':
         specifier: ^19.0.0
         version: 19.2.14
@@ -192,7 +161,7 @@ importers:
         specifier: ^5.7.3
         version: 5.9.3
 
-  packages/scaler-react-native:
+  packages/panscale-react-native:
     dependencies:
       react-native:
         specifier: '>=0.71.0'
@@ -201,9 +170,9 @@ importers:
       '@arethetypeswrong/cli':
         specifier: ^0.17.4
         version: 0.17.4
-      '@scaler/core':
+      '@panscale/core':
         specifier: workspace:*
-        version: link:../scaler-core
+        version: link:../panscale-core
       '@types/react':
         specifier: ^19.0.0
         version: 19.2.14
@@ -223,14 +192,14 @@ importers:
         specifier: ^5.7.3
         version: 5.9.3
 
-  packages/scaler-web:
+  packages/panscale-web:
     devDependencies:
       '@arethetypeswrong/cli':
         specifier: ^0.17.4
         version: 0.17.4
-      '@scaler/core':
+      '@panscale/core':
         specifier: workspace:*
-        version: link:../scaler-core
+        version: link:../panscale-core
       publint:
         specifier: ^0.3.8
         version: 0.3.18

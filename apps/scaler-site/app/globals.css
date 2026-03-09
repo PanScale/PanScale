@@ -1,8 +1,0 @@
-@import "tailwindcss";
-@import "fumadocs-ui/style.css";
-
-@source "../../../node_modules/fumadocs-ui/dist/**/*.js";
-
-:root {
-  color-scheme: light dark;
-}

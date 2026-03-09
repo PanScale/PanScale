@@ -4,12 +4,12 @@ import { spawn } from "node:child_process";
 import pc from "picocolors";
 
 const cwd = process.cwd();
-const configPackageDir = "packages/scaler-config";
+const configPackageDir = "packages/panscale-config";
 const moduleDirs = [
-  "packages/scaler-core",
-  "packages/scaler-web",
-  "packages/scaler-react",
-  "packages/scaler-react-native"
+  "packages/panscale-core",
+  "packages/panscale-web",
+  "packages/panscale-react",
+  "packages/panscale-react-native"
 ];
 
 function run(cmd, args, options = {}) {

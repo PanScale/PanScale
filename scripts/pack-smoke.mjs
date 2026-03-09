@@ -6,10 +6,10 @@ import { spawn } from "node:child_process";
 import pc from "picocolors";
 
 const packageDirs = [
-  "packages/scaler-core",
-  "packages/scaler-web",
-  "packages/scaler-react",
-  "packages/scaler-react-native"
+  "packages/panscale-core",
+  "packages/panscale-web",
+  "packages/panscale-react",
+  "packages/panscale-react-native"
 ];
 const cwd = process.cwd();
 

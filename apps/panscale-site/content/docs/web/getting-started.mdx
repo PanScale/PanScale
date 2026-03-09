@@ -1,0 +1,30 @@
+---
+title: Getting Started
+description: "Getting started with @panscale/web."
+---
+
+Install the packages:
+
+```bash
+pnpm add @panscale/core @panscale/web transformation-matrix
+```
+
+## Quick Start
+
+```typescript
+import { createWebScaler } from "@panscale/web";
+
+const container = document.getElementById("viewport")!;
+
+const { scaler, destroy } = createWebScaler(container, {
+  callback(values) {
+    const content = container.querySelector(".content") as HTMLElement;
+    content.style.transform = `translate(${values.translateX}px, ${values.translateY}px) scale(${values.zoom})`;
+  },
+  zooming: true,
+  bouncing: true
+});
+
+// Clean up when done
+// destroy();
+```

@@ -1,0 +1,23 @@
+---
+title: API
+description: "@panscale/web API reference."
+---
+
+# API
+
+## createWebScaler
+
+```typescript
+function createWebScaler(element: HTMLElement, options: WebScalerOptions): WebScaler
+```
+
+Factory function that creates a Scaler instance with DOM event listeners attached.
+
+## Event Adapters
+
+- `attachMouseEvents(element, scaler)` — Mouse event adapter
+- `attachTouchEvents(element, scaler)` — Touch event adapter
+- `attachWheelEvents(element, scaler)` — Wheel event adapter
+- `attachPointerEvents(element, scaler)` — Pointer Events API adapter
+- `attachGestureEvents(element, scaler)` — Safari gesture events adapter
+- `applyTouchAction(element)` — Sets `touch-action: none` on element

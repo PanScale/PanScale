@@ -9,7 +9,7 @@ Pan/zoom/scroll transformation library for any JS runtime.
 - `packages/panscale-react` — React hooks/components (`@panscale/react`)
 - `packages/panscale-react-native` — React Native adapter (`@panscale/react-native`)
 - `packages/panscale-config` — Shared config (`@panscale/config`)
-- `apps/panscale-site` — Docs + playground (Next.js, port 7780)
+- `apps/panscale-site` — Docs + playground (Next.js)
 
 ## Commands
 
@@ -19,11 +19,6 @@ pnpm build            # build all packages
 pnpm dev              # dev all (parallel)
 pnpm --filter panscale-site dev   # dev site only
 ```
-
-## Deployment
-
-- **Prod**: `panscale.yatsyk.com` (Vercel, token: `$VERCEL_YATSYK_TOKEN`)
-- **NPM**: `$NPM_TOKEN` env var for publishing
 
 ## Notes
 

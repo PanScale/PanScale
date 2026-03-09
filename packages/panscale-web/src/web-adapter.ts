@@ -2,6 +2,7 @@ import { Scaler, type ScalerOptions, type ScalerValues } from "@panscale/core";
 import { attachPointerEvents } from "./events/pointer";
 import { attachWheelEvents } from "./events/wheel";
 import { attachGestureEvents } from "./events/gesture";
+import { attachDoubleTapEvents } from "./events/double-tap";
 import { applyTouchAction } from "./css";
 
 export interface WebScaler {
@@ -14,10 +15,12 @@ export interface WebScalerOptions extends Partial<ScalerOptions> {
   callback: (values: ScalerValues) => void;
   contentWidth?: number;
   contentHeight?: number;
+  doubleTapZoom?: number;
+  onResize?: (size: { width: number; height: number }) => void;
 }
 
 export function createWebScaler(element: HTMLElement, options: WebScalerOptions): WebScaler {
-  const { callback, contentWidth, contentHeight, ...scalerOptions } = options;
+  const { callback, contentWidth, contentHeight, doubleTapZoom, onResize, ...scalerOptions } = options;
   const scaler = new Scaler(callback, { zooming: true, ...scalerOptions });
 
   function updateDimensions() {
@@ -34,9 +37,16 @@ export function createWebScaler(element: HTMLElement, options: WebScalerOptions)
   const cleanupWheel = attachWheelEvents(element, scaler);
   const cleanupGesture = attachGestureEvents(element, scaler);
   const cleanupCSS = applyTouchAction(element);
+  const cleanupDoubleTap = doubleTapZoom
+    ? attachDoubleTapEvents(element, scaler, { doubleTapZoom })
+    : null;
 
-  const resizeObserver = new ResizeObserver(() => {
+  const resizeObserver = new ResizeObserver((entries) => {
     updateDimensions();
+    if (onResize && entries[0]) {
+      const { width, height } = entries[0].contentRect;
+      onResize({ width, height });
+    }
   });
   resizeObserver.observe(element);
 
@@ -52,6 +62,7 @@ export function createWebScaler(element: HTMLElement, options: WebScalerOptions)
       cleanupWheel();
       cleanupGesture();
       cleanupCSS();
+      cleanupDoubleTap?.();
       resizeObserver.disconnect();
       scaler.destroy();
     }

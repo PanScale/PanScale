@@ -22,6 +22,9 @@ new Scaler(callback: (values: ScalerValues) => void, options?: Partial<ScalerOpt
 - `scrollBy(dx, dy, animate?)` — Scroll by relative delta
 - `zoomTo(level, animate?, originX?, originY?)` — Zoom to absolute level
 - `zoomBy(factor, animate?, originX?, originY?)` — Zoom by relative factor
+- `scrollToWithZoom(left, top, zoom, animate?)` — Scroll and zoom in one motion
+- `setZoomBounds(min, max)` — Update zoom limits at runtime (re-clamps current zoom)
+- `fitToContent(animate?)` — Fit content to viewport, centering it
 - `getValues(): ScalerValues` — Get current transform values
 - `doTouchStart(touches, timeStamp)` — Handle touch start
 - `doTouchMove(touches, timeStamp)` — Handle touch move
@@ -41,6 +44,7 @@ interface ScalerValues {
   zoom: number;
   scrollLeft: number;
   scrollTop: number;
+  isInteracting: boolean;  // true during touch/momentum/bounce
 }
 ```
 

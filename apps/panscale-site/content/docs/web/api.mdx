@@ -17,6 +17,8 @@ Factory function that creates a Scaler instance with DOM event listeners attache
 
 - `callback` — Transform update handler (required)
 - `contentWidth` / `contentHeight` — Content dimensions (optional, defaults to element scroll size)
+- `doubleTapZoom` — Target zoom level for double-tap (0 or omitted = disabled)
+- `onResize` — Callback fired on element resize: `(size: { width: number; height: number }) => void`
 
 All [ScalerOptions](/docs/core/api#scaleroptions) are accepted. Example without physics:
 

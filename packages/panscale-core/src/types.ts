@@ -14,6 +14,7 @@ export interface ScalerValues {
   zoom: number;
   scrollLeft: number;
   scrollTop: number;
+  isInteracting: boolean;
 }
 
 /** Injectable animation frame provider. */

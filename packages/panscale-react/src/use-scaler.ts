@@ -5,6 +5,8 @@ import { createWebScaler, type WebScaler } from "@panscale/web";
 export interface UseScalerOptions extends Partial<ScalerOptions> {
   contentWidth?: number;
   contentHeight?: number;
+  doubleTapZoom?: number;
+  onResize?: (size: { width: number; height: number }) => void;
 }
 
 export interface UseScalerReturn {
@@ -15,6 +17,8 @@ export interface UseScalerReturn {
   zoomTo: (level: number, animate?: boolean, originX?: number, originY?: number) => void;
   zoomBy: (factor: number, animate?: boolean, originX?: number, originY?: number) => void;
   setContentSize: (width: number, height: number) => void;
+  fitToContent: (animate?: boolean) => void;
+  setZoomBounds: (min: number, max: number) => void;
 }
 
 const defaultValues: ScalerValues = {
@@ -23,7 +27,8 @@ const defaultValues: ScalerValues = {
   translateY: 0,
   zoom: 1,
   scrollLeft: 0,
-  scrollTop: 0
+  scrollTop: 0,
+  isInteracting: false
 };
 
 export function useScaler(options?: UseScalerOptions): UseScalerReturn {
@@ -38,12 +43,14 @@ export function useScaler(options?: UseScalerOptions): UseScalerReturn {
     if (!el) return;
 
     const opts = optionsRef.current;
-    const { contentWidth, contentHeight, ...scalerOpts } = opts ?? {};
+    const { contentWidth, contentHeight, doubleTapZoom, onResize, ...scalerOpts } = opts ?? {};
 
     const webScaler = createWebScaler(el, {
       callback: setValues,
       contentWidth,
       contentHeight,
+      doubleTapZoom,
+      onResize,
       ...scalerOpts
     });
     webScalerRef.current = webScaler;
@@ -74,5 +81,13 @@ export function useScaler(options?: UseScalerOptions): UseScalerReturn {
     webScalerRef.current?.updateContentSize(width, height);
   }, []);
 
-  return { ref, values, scrollTo, scrollBy, zoomTo, zoomBy, setContentSize };
+  const fitToContent = useCallback((animate?: boolean) => {
+    webScalerRef.current?.scaler.fitToContent(animate);
+  }, []);
+
+  const setZoomBounds = useCallback((min: number, max: number) => {
+    webScalerRef.current?.scaler.setZoomBounds(min, max);
+  }, []);
+
+  return { ref, values, scrollTo, scrollBy, zoomTo, zoomBy, setContentSize, fitToContent, setZoomBounds };
 }

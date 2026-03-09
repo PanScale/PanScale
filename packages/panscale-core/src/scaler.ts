@@ -21,7 +21,7 @@ import type {
 } from "./types";
 import { mergeOptions } from "./options";
 import { getAnimationProvider } from "./animation";
-import { clampZoom, clampScroll, getScrollBounds, detectAxisLock } from "./constraints";
+import { clamp, clampZoom, clampScroll, getScrollBounds, detectAxisLock } from "./constraints";
 import { createMomentum, startMomentum, stepMomentum, stopMomentum } from "./physics/momentum";
 import { createBounce, startBounce, stepBounce, stopBounce } from "./physics/bounce";
 import { snapToPage, snapToGrid } from "./physics/snap";
@@ -80,10 +80,15 @@ export class Scaler {
 
   private destroyed = false;
 
+  private zoomMin: number;
+  private zoomMax: number;
+
   constructor(callback: (values: ScalerValues) => void, options?: Partial<ScalerOptions>) {
     this.options = mergeOptions(options);
     this.callback = callback;
     this.animProvider = getAnimationProvider(this.options.animationProvider);
+    this.zoomMin = this.options.minZoom;
+    this.zoomMax = this.options.maxZoom;
   }
 
   /** Set viewport and content dimensions. */
@@ -120,7 +125,7 @@ export class Scaler {
 
   /** Zoom to absolute level. */
   zoomTo(level: number, animate = false, originX?: number, originY?: number): void {
-    const clamped = clampZoom(level, this.options);
+    const clamped = this.clampZoomValue(level);
     if (animate && this.options.animating) {
       this.animateScrollTo(this.getDecomposed().scrollLeft, this.getDecomposed().scrollTop, clamped);
     } else {
@@ -136,7 +141,7 @@ export class Scaler {
 
   /** Animate to a target scroll position AND zoom level in a single motion. */
   scrollToWithZoom(left: number, top: number, zoom: number, animate = false): void {
-    const clamped = clampZoom(zoom, this.options);
+    const clamped = this.clampZoomValue(zoom);
     if (animate && this.options.animating) {
       this.animateScrollTo(left, top, clamped);
     } else {
@@ -144,6 +149,27 @@ export class Scaler {
       this.setScrollPosition(left, top);
       this.clampAndPublish();
     }
+  }
+
+  /** Update zoom bounds at runtime. Re-clamps current zoom if out of bounds. */
+  setZoomBounds(min: number, max: number): void {
+    this.zoomMin = min;
+    this.zoomMax = max;
+    this.clampAndPublish();
+  }
+
+  /** Fit content to viewport, optionally animated. */
+  fitToContent(animate = false): void {
+    const { clientWidth, clientHeight, contentWidth, contentHeight } = this.dimensions;
+    if (contentWidth === 0 || contentHeight === 0) return;
+
+    const fitZoom = Math.min(clientWidth / contentWidth, clientHeight / contentHeight);
+    const clampedZoom = this.clampZoomValue(fitZoom);
+    const scaledW = contentWidth * clampedZoom;
+    const scaledH = contentHeight * clampedZoom;
+    const scrollLeft = -(clientWidth - scaledW) / 2;
+    const scrollTop = -(clientHeight - scaledH) / 2;
+    this.scrollToWithZoom(scrollLeft, scrollTop, clampedZoom, animate);
   }
 
   /** Get current decomposed transform values. */
@@ -386,7 +412,8 @@ export class Scaler {
       translateY: d.translate.ty,
       zoom: d.scale.sx,
       scrollLeft: -d.translate.tx,
-      scrollTop: -d.translate.ty
+      scrollTop: -d.translate.ty,
+      isInteracting: this.tracking || this.momentum.active || this.bounce.active
     };
   }
 
@@ -413,7 +440,7 @@ export class Scaler {
   }
 
   private applyZoom(newZoom: number, originX?: number, originY?: number): void {
-    const clamped = clampZoom(newZoom, this.options);
+    const clamped = this.clampZoomValue(newZoom);
     const { scrollLeft, scrollTop } = this.getDecomposed();
     const currentZoom = this.getCurrentZoom();
 
@@ -429,6 +456,10 @@ export class Scaler {
       scale(clamped, clamped),
       translate(-newScrollLeft / clamped, -newScrollTop / clamped)
     );
+  }
+
+  private clampZoomValue(zoom: number): number {
+    return clamp(zoom, this.zoomMin, this.zoomMax);
   }
 
   private clampAndPublish(): void {

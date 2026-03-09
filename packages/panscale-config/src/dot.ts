@@ -9,7 +9,7 @@ export const dot = DotSchema.parse({
     links: {
       github: {
         state: "configured",
-        url: "https://github.com/ScalerNpm/ScalerMonorepo"
+        url: "https://github.com/PanScale/PanScale"
       }
     }
   },

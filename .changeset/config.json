@@ -5,7 +5,7 @@
   "changelog": [
     "@changesets/changelog-github",
     {
-      "repo": "ScalerNpm/ScalerMonorepo"
+      "repo": "PanScale/PanScale"
     }
   ],
   "commit": false,

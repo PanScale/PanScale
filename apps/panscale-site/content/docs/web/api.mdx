@@ -13,6 +13,23 @@ function createWebScaler(element: HTMLElement, options: WebScalerOptions): WebSc
 
 Factory function that creates a Scaler instance with DOM event listeners attached.
 
+`WebScalerOptions` extends `Partial<ScalerOptions>` with:
+
+- `callback` — Transform update handler (required)
+- `contentWidth` / `contentHeight` — Content dimensions (optional, defaults to element scroll size)
+
+All [ScalerOptions](/docs/core/api#scaleroptions) are accepted. Example without physics:
+
+```typescript
+const scaler = createWebScaler(element, {
+  contentWidth: 1600,
+  contentHeight: 900,
+  callback: (values) => { /* ... */ },
+  animating: false,
+  bouncing: false,
+});
+```
+
 ## Event Adapters
 
 - `attachMouseEvents(element, scaler)` — Mouse event adapter

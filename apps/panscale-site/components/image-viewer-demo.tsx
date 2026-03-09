@@ -22,7 +22,8 @@ export function ImageViewerDemo() {
   const [fitMode, setFitMode] = useState<FitMode>("fit");
   const [containerSize, setContainerSize] = useState({ w: 0, h: 0 });
   const [showDebug, setShowDebug] = useState(true);
-  const [forceCenter, setForceCenter] = useState(true);
+  const [forceCenter, setForceCenter] = useState(false);
+  const [physics, setPhysics] = useState(true);
   const [lastPinchCenter, setLastPinchCenter] = useState<{ x: number; y: number } | null>(null);
 
   const img = SAMPLE_IMAGES[imageIdx]!;
@@ -118,7 +119,8 @@ export function ImageViewerDemo() {
       contentWidth: img.w,
       contentHeight: img.h,
       zooming: true,
-      bouncing: true,
+      bouncing: physics,
+      animating: physics,
       minZoom: Math.min(initZoom * 0.5, 0.1),
       maxZoom: 5,
       locking: false,
@@ -142,7 +144,7 @@ export function ImageViewerDemo() {
       ws.destroy();
       webScalerRef.current = null;
     };
-  }, [imageIdx]);
+  }, [imageIdx, physics]);
 
   const applyFit = useCallback(() => {
     const ws = webScalerRef.current;
@@ -269,6 +271,15 @@ export function ImageViewerDemo() {
         <button onClick={zoomIn} type="button" className="btn-ctrl">+</button>
         <button onClick={reset1to1} type="button" className="btn-ctrl">1:1</button>
         <div className="mx-2 h-6 w-px bg-gray-300 dark:bg-gray-600" />
+        <label className="flex items-center gap-1.5 text-sm cursor-pointer select-none">
+          <input
+            type="checkbox"
+            checked={physics}
+            onChange={(e) => setPhysics(e.target.checked)}
+            className="accent-indigo-500"
+          />
+          Physics
+        </label>
         <label className="flex items-center gap-1.5 text-sm cursor-pointer select-none">
           <input
             type="checkbox"

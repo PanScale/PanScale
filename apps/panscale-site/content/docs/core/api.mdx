@@ -62,3 +62,20 @@ interface ScalerOptions {
   animationProvider: AnimationProvider | null; // default: null (auto-detect)
 }
 ```
+
+### Physics options
+
+| Option | Default | Description |
+|--------|---------|-------------|
+| `animating` | `true` | Enables momentum scrolling after touch release. When `false`, scrolling stops immediately when the finger lifts. |
+| `bouncing` | `true` | Enables elastic bounce-back at edges (spring physics). When `false`, scrolling stops hard at content boundaries. |
+| `deceleration` | `0.95` | Momentum friction factor (0–1). Lower values = faster stop. |
+
+To disable all physics and get direct 1:1 panning:
+
+```typescript
+new Scaler(callback, {
+  animating: false,
+  bouncing: false,
+});
+```

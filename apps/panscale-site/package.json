@@ -3,7 +3,9 @@
   "private": true,
   "type": "module",
   "version": "0.1.0",
-  "engines": { "node": ">=20" },
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "dev": "next dev --port ${PORT:-7780}",
     "build": "next build",
@@ -13,11 +15,12 @@
   "dependencies": {
     "@panscale/config": "workspace:*",
     "@panscale/core": "workspace:*",
-    "@panscale/web": "workspace:*",
     "@panscale/react": "workspace:*",
+    "@panscale/web": "workspace:*",
     "fumadocs-core": "^16.4.9",
     "fumadocs-mdx": "^14.2.6",
     "fumadocs-ui": "^16.4.9",
+    "motion": "^12.35.1",
     "next": "^16.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

@@ -1,0 +1,6 @@
+{
+  "project": "panscale",
+  "servers": [
+    { "name": "dev", "cmd": "pnpm dev", "port": 7780, "url": "https://panscale.pg.yatsyk.com" }
+  ]
+}

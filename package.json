@@ -1,5 +1,6 @@
 {
   "devDependencies": {
+    "@agentvibes/guardrails": "github:AgentVibes/guardrails#3bd2bce7ce0f3f903904f0c67676c45b780e5a38",
     "@arethetypeswrong/cli": "^0.17.4",
     "@changesets/changelog-github": "^0.5.0",
     "@changesets/cli": "^2.29.7",
@@ -21,7 +22,7 @@
     "changeset": "changeset",
     "changeset:publish": "changeset publish",
     "changeset:version": "changeset version",
-    "check": "node --import tsx ./scripts/check.mjs",
+    "check": "guardrails verify-diff && node ./scripts/pack-verify.mjs && node ./scripts/dot-validate.mjs && node ./scripts/docs-sync.mjs && node ./scripts/docs-orphans.mjs && node ./scripts/pack-smoke.mjs && node ./scripts/changeset-required.mjs",
     "dev": "turbo dev --parallel"
   },
   "type": "module"

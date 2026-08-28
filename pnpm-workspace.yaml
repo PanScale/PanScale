@@ -1,3 +1,6 @@
 packages:
   - apps/*
   - packages/*
+
+allowBuilds:
+  "@agentvibes/guardrails@github:AgentVibes/guardrails#3bd2bce7ce0f3f903904f0c67676c45b780e5a38": true

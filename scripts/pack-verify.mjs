@@ -32,15 +32,6 @@ async function main() {
   await runIn(configPackageDir, "pnpm", ["install"]);
   await runIn(configPackageDir, "pnpm", ["build"]);
 
-  console.log(pc.cyan("== DOT validate =="));
-  await run("node", ["./scripts/dot-validate.mjs"], { cwd });
-
-  console.log(pc.cyan("== Docs sync =="));
-  await run("node", ["./scripts/docs-sync.mjs"], { cwd });
-
-  console.log(pc.cyan("== Docs orphans =="));
-  await run("node", ["./scripts/docs-orphans.mjs"], { cwd });
-
   console.log(pc.cyan("== Build + publint + attw =="));
   for (const dir of moduleDirs) {
     await runIn(dir, "pnpm", ["install"]);
@@ -56,13 +47,7 @@ async function main() {
     ]);
   }
 
-  console.log(pc.cyan("== Pack smoke =="));
-  await run("node", ["./scripts/pack-smoke.mjs"], { cwd });
-
-  console.log(pc.cyan("== Changeset required =="));
-  await run("node", ["./scripts/changeset-required.mjs"], { cwd });
-
-  console.log(pc.green("All checks passed."));
+  console.log(pc.green("pack-verify passed."));
 }
 
 main().catch((err) => {

@@ -8,6 +8,9 @@ importers:
 
   .:
     devDependencies:
+      '@agentvibes/guardrails':
+        specifier: github:AgentVibes/guardrails#3bd2bce7ce0f3f903904f0c67676c45b780e5a38
+        version: https://codeload.github.com/AgentVibes/guardrails/tar.gz/3bd2bce7ce0f3f903904f0c67676c45b780e5a38
       '@arethetypeswrong/cli':
         specifier: ^0.17.4
         version: 0.17.4
@@ -217,6 +220,12 @@ importers:
         version: 5.9.3
 
 packages:
+
+  '@agentvibes/guardrails@https://codeload.github.com/AgentVibes/guardrails/tar.gz/3bd2bce7ce0f3f903904f0c67676c45b780e5a38':
+    resolution: {tarball: https://codeload.github.com/AgentVibes/guardrails/tar.gz/3bd2bce7ce0f3f903904f0c67676c45b780e5a38}
+    version: 0.1.0
+    engines: {node: '>=22'}
+    hasBin: true
 
   '@alloc/quick-lru@5.2.0':
     resolution: {integrity: sha512-UrcABB+4bUrFABwbluTIBErXwvbsU/V7TZWfmbgJfbkwiBuziS9gxdODUyuiecfdGQ85jglMW6juS3+z5TsKLw==}
@@ -3761,6 +3770,9 @@ packages:
   trough@2.2.0:
     resolution: {integrity: sha512-tmMpK00BjZiUyVyvrBK7knerNgmgvcV/KLVyuma/SC+TQN167GrMRciANTz09+k3zW8L8t60jWO1GpfkZdjTaw==}
 
+  ts-pattern@5.9.0:
+    resolution: {integrity: sha512-6s5V71mX8qBUmlgbrfL33xDUwO0fq48rxAu2LBE11WBeGdpCPOsXksQbZJHvHwhrd3QjUusd3mAOM5Gg0mFBLg==}
+
   tsdown@0.10.2:
     resolution: {integrity: sha512-MhauwcNNVMeW3TTvpADDVPoAC3kfBfwPru3gtQ5pbVvGIF399VtbH3szUuXmw56P+DDlYjtQd0gKGJ8K5xRayQ==}
     engines: {node: '>=18.0.0'}
@@ -4028,6 +4040,11 @@ packages:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
 
 snapshots:
+
+  '@agentvibes/guardrails@https://codeload.github.com/AgentVibes/guardrails/tar.gz/3bd2bce7ce0f3f903904f0c67676c45b780e5a38':
+    dependencies:
+      ts-pattern: 5.9.0
+      typescript: 5.9.3
 
   '@alloc/quick-lru@5.2.0': {}
 
@@ -8093,6 +8110,8 @@ snapshots:
   trim-lines@3.0.1: {}
 
   trough@2.2.0: {}
+
+  ts-pattern@5.9.0: {}
 
   tsdown@0.10.2(publint@0.3.18)(typescript@5.9.3):
     dependencies:

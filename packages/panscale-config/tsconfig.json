@@ -6,7 +6,6 @@
     "emitDeclarationOnly": false,
     "noEmit": true,
     "outDir": "dist",
-    "rootDir": "src",
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "target": "ES2022"

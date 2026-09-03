@@ -9,8 +9,8 @@ importers:
   .:
     devDependencies:
       '@agentvibes/guardrails':
-        specifier: github:AgentVibes/guardrails#3bd2bce7ce0f3f903904f0c67676c45b780e5a38
-        version: https://codeload.github.com/AgentVibes/guardrails/tar.gz/3bd2bce7ce0f3f903904f0c67676c45b780e5a38
+        specifier: ^0.1.0
+        version: 0.1.0
       '@arethetypeswrong/cli':
         specifier: ^0.17.4
         version: 0.17.4
@@ -221,9 +221,8 @@ importers:
 
 packages:
 
-  '@agentvibes/guardrails@https://codeload.github.com/AgentVibes/guardrails/tar.gz/3bd2bce7ce0f3f903904f0c67676c45b780e5a38':
-    resolution: {tarball: https://codeload.github.com/AgentVibes/guardrails/tar.gz/3bd2bce7ce0f3f903904f0c67676c45b780e5a38}
-    version: 0.1.0
+  '@agentvibes/guardrails@0.1.0':
+    resolution: {integrity: sha512-dWQt0FBZEwwxBhg8Rswyh45mtQATop6lTva9Sl17A3npUHhqSI0uB3kn7B9+Nr2MEmNTIcrZhuuvLE/ghB2heg==}
     engines: {node: '>=22'}
     hasBin: true
 
@@ -4041,7 +4040,7 @@ packages:
 
 snapshots:
 
-  '@agentvibes/guardrails@https://codeload.github.com/AgentVibes/guardrails/tar.gz/3bd2bce7ce0f3f903904f0c67676c45b780e5a38':
+  '@agentvibes/guardrails@0.1.0':
     dependencies:
       ts-pattern: 5.9.0
       typescript: 5.9.3

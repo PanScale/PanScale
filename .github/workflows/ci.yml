@@ -10,6 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # guardrails verify-diff gates the lines a change adds against the
+          # merge-base; a shallow clone has no merge-base.
+          fetch-depth: 0
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
@@ -17,3 +21,7 @@ jobs:
           cache: pnpm
       - run: pnpm install
       - run: pnpm -r check
+      # The root check (guardrails verify-diff + the pack/docs/changeset scripts).
+      # `pnpm -r` does not include the workspace root, so without this step the
+      # gate never ran in CI (is-1498dfaf).
+      - run: pnpm check

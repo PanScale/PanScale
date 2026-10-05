@@ -13,6 +13,13 @@ const packageDirs = [
 ];
 const cwd = process.cwd();
 
+// Packages whose import graph reaches `react-native`, which ships Flow-typed
+// source that plain Node cannot parse (`import typeof …`). Executing them under
+// Node tests React Native, not this package, so for these the smoke check is that
+// the installed tarball's exports map RESOLVES — `import.meta.resolve` — without
+// running the module.
+const resolveOnly = new Set(["packages/panscale-react-native"]);
+
 function run(cmd, args, options = {}) {
   return new Promise((resolve, reject) => {
     const child = spawn(cmd, args, { stdio: "pipe", ...options });
@@ -52,9 +59,10 @@ for (const relDir of packageDirs) {
   const pkgJson = JSON.parse(await fs.readFile(path.join(pkgDir, "package.json"), "utf8"));
   const importTarget = pkgJson.name;
   const testFile = path.join(tmpDir, "index.mjs");
-  const consumerSource =
-    'import * as mod from "' + importTarget + '";\n' +
-    "console.log(Object.keys(mod).slice(0, 5));\n";
+  const consumerSource = resolveOnly.has(relDir)
+    ? "console.log(import.meta.resolve(" + JSON.stringify(importTarget) + "));\n"
+    : 'import * as mod from "' + importTarget + '";\n' +
+      "console.log(Object.keys(mod).slice(0, 5));\n";
   await fs.writeFile(testFile, consumerSource, "utf8");
 
   await run("node", [testFile], { cwd: tmpDir });

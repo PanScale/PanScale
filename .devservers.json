@@ -1,6 +1,0 @@
-{
-  "project": "panscale",
-  "servers": [
-    { "name": "dev", "cmd": "pnpm dev", "port": 7780 }
-  ]
-}

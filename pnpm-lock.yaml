@@ -45,8 +45,8 @@ importers:
   apps/panscale-site:
     dependencies:
       '@byoklab/site':
-        specifier: ^0.4.1
-        version: 0.4.1(dfe9ad87e288b876c47d5501dfc02234)
+        specifier: ^0.4.2
+        version: 0.4.2(dfe9ad87e288b876c47d5501dfc02234)
       '@byoklab/site-config':
         specifier: ^0.3.0
         version: 0.3.0
@@ -421,10 +421,12 @@ packages:
 
   '@byoklab/site-config@0.3.0':
     resolution: {integrity: sha512-TZDX9cz5sI10I8HRrMdbFOg+KSY7tiEdOvYvuU6eb658f4T6+f5Qq4y7qCWr8nukNNgRLUwByy4C2DY7+AKOKw==, tarball: https://git.i.byokapi.com/api/packages/byoklab/npm/%40byoklab%2Fsite-config/-/0.3.0/site-config-0.3.0.tgz}
+    engines: {node: '>=20'}
     hasBin: true
 
   '@byoklab/site-doctor@0.3.0':
     resolution: {integrity: sha512-X+Rl75VLKqBNrXVoqCZ/oyTUKFhYQ1DiwsfJU4j1t0X1v7WWFhNPfRgHpl580LhweXBZYGij7enPyYkoU6SBAw==, tarball: https://git.i.byokapi.com/api/packages/byoklab/npm/%40byoklab%2Fsite-doctor/-/0.3.0/site-doctor-0.3.0.tgz}
+    engines: {node: '>=20'}
     hasBin: true
 
   '@byoklab/site-llms@0.1.1':
@@ -451,8 +453,8 @@ packages:
     peerDependencies:
       react: ^19.0.0
 
-  '@byoklab/site@0.4.1':
-    resolution: {integrity: sha512-zNOM6v0UXAnzTZy+rJ8ic0GpNmbIUzXN8eGImNg5gARjq/GYWJqOm6LwieMsd7XhigiOSCIJRW3xA0S7zrjP2g==, tarball: https://git.i.byokapi.com/api/packages/byoklab/npm/%40byoklab%2Fsite/-/0.4.1/site-0.4.1.tgz}
+  '@byoklab/site@0.4.2':
+    resolution: {integrity: sha512-VDYC7LKoymrjg/IUeYmMh8rcsYjv8wCdkrJs7+H0SuKAqj9+ilHCqz7XQ/NNxO5X2dJ8MLpfx+b4zuYEMS6sag==, tarball: https://git.i.byokapi.com/api/packages/byoklab/npm/%40byoklab%2Fsite/-/0.4.2/site-0.4.2.tgz}
     hasBin: true
     peerDependencies:
       fumadocs-core: ~16.4.9
@@ -4551,7 +4553,7 @@ snapshots:
     transitivePeerDependencies:
       - next
 
-  '@byoklab/site@0.4.1(dfe9ad87e288b876c47d5501dfc02234)':
+  '@byoklab/site@0.4.2(dfe9ad87e288b876c47d5501dfc02234)':
     dependencies:
       '@agentvibes/kit': 0.2.0(clsx@2.1.1)(mobx-react-lite@4.1.1(mobx@6.16.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(mobx@6.16.1)(react@19.2.4)(tailwind-merge@3.5.0)(ts-pattern@5.9.0)
       '@byoklab/site-app': 0.2.0(next@16.1.6(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)

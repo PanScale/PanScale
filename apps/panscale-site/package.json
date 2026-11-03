@@ -15,7 +15,7 @@
     "doctor": "site-doctor check --next . --site ."
   },
   "dependencies": {
-    "@byoklab/site": "^0.4.1",
+    "@byoklab/site": "^0.4.2",
     "@byoklab/site-config": "^0.3.0",
     "@panscale/core": "workspace:*",
     "@panscale/react": "workspace:*",

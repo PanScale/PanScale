@@ -25,5 +25,11 @@
     "check": "guardrails verify-diff && node ./scripts/pack-verify.mjs && node ./scripts/dot-validate.mjs && node ./scripts/docs-sync.mjs && node ./scripts/docs-orphans.mjs && node ./scripts/pack-smoke.mjs && node ./scripts/changeset-required.mjs",
     "dev": "turbo dev --parallel"
   },
-  "type": "module"
+  "type": "module",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "sharp"
+    ]
+  }
 }

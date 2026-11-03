@@ -4,3 +4,5 @@ packages:
 
 allowBuilds:
   "@agentvibes/guardrails@0.1.0": true
+  esbuild: true
+  sharp: true

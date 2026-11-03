@@ -319,7 +319,7 @@ export function WebGLDemo() {
   return (
     <section>
       <h2 className="mb-2 text-lg font-semibold">WebGL Scene</h2>
-      <p className="mb-3 text-sm text-gray-500 dark:text-gray-400">
+      <p className="mb-3 text-sm text-fd-muted-foreground">
         Scaler drives a WebGL viewport. The transformation matrix is converted to a GL MVP matrix
         each frame. Pan/zoom with mouse or touch &mdash; all rendering happens on the GPU.
       </p>
@@ -335,7 +335,7 @@ export function WebGLDemo() {
 
       <div
         ref={containerRef}
-        className="relative overflow-hidden rounded-xl border-2 border-gray-200 dark:border-gray-700"
+        className="relative overflow-hidden rounded-xl border-2 border-fd-border"
         style={{ height: 500, cursor: "grab" }}
       >
         <canvas
@@ -346,7 +346,7 @@ export function WebGLDemo() {
       </div>
 
       {values && (
-        <div className="mt-2 rounded-lg border border-gray-200 bg-white px-4 py-2 font-mono text-xs dark:border-gray-700 dark:bg-gray-900">
+        <div className="mt-2 rounded-lg border border-fd-border bg-fd-card px-4 py-2 font-mono text-xs text-fd-card-foreground">
           <span className="mr-4">Scene: {SCENE_W}&times;{SCENE_H}</span>
           <span className="mr-4">Zoom: {(zoom * 100).toFixed(0)}%</span>
           <span className="mr-4">Translate: ({values.translateX.toFixed(1)}, {values.translateY.toFixed(1)})</span>

@@ -4,7 +4,6 @@ import { spawn } from "node:child_process";
 import pc from "picocolors";
 
 const cwd = process.cwd();
-const configPackageDir = "packages/panscale-config";
 const moduleDirs = [
   "packages/panscale-core",
   "packages/panscale-web",
@@ -28,10 +27,6 @@ async function runIn(dir, cmd, args) {
 }
 
 async function main() {
-  console.log(pc.cyan("== Build config package =="));
-  await runIn(configPackageDir, "pnpm", ["install"]);
-  await runIn(configPackageDir, "pnpm", ["build"]);
-
   console.log(pc.cyan("== Build + publint + attw =="));
   for (const dir of moduleDirs) {
     await runIn(dir, "pnpm", ["install"]);

@@ -1,12 +1,13 @@
 import pc from "picocolors";
 
-import { loadDot } from "../packages/panscale-config/dist/index.js";
+import { loadSite } from "./site-config.mjs";
 
 try {
-  const dot = loadDot();
-  console.log(pc.green("DOT valid for " + dot.project.id + " (modules: " + dot.modules.length + ")."));
+  const site = await loadSite();
+  const modules = site.sections.npm?.modules ?? [];
+  console.log(pc.green("site.config valid for " + site.projectId + " (modules: " + modules.length + ")."));
 } catch (err) {
-  console.error(pc.red("DOT validation failed."));
+  console.error(pc.red("site.config validation failed."));
   console.error(err);
   process.exitCode = 1;
 }

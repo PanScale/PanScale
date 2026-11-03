@@ -65,7 +65,7 @@ export function CardsDemo() {
   return (
     <section>
       <h2 className="mb-2 text-lg font-semibold">Card Grid</h2>
-      <p className="mb-3 text-sm text-gray-500 dark:text-gray-400">
+      <p className="mb-3 text-sm text-fd-muted-foreground">
         Service architecture cards. Pan and zoom to explore.
       </p>
 
@@ -91,7 +91,7 @@ export function CardsDemo() {
 
       <div
         ref={containerRef}
-        className="relative overflow-hidden rounded-xl border-2 border-gray-200 bg-gray-100 dark:border-gray-700 dark:bg-gray-900"
+        className="relative overflow-hidden rounded-xl border-2 border-fd-border bg-fd-muted"
         style={{ height: 400, cursor: "grab" }}
       >
         <div

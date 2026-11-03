@@ -63,7 +63,7 @@ export function SnapPagingDemo() {
   return (
     <section>
       <h2 className="mb-2 text-lg font-semibold">Paging / Snap</h2>
-      <p className="mb-3 text-sm text-gray-500 dark:text-gray-400">
+      <p className="mb-3 text-sm text-fd-muted-foreground">
         Horizontal paging with snap. Drag left/right to navigate pages.
       </p>
 
@@ -77,8 +77,8 @@ export function SnapPagingDemo() {
             type="button"
             className={`rounded-full px-3 py-1 text-xs font-medium transition ${
               i === currentPage
-                ? "bg-gray-800 text-white dark:bg-gray-200 dark:text-gray-900"
-                : "bg-gray-200 text-gray-600 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300"
+                ? "bg-fd-foreground text-fd-background"
+                : "bg-fd-secondary text-fd-secondary-foreground hover:bg-fd-accent"
             }`}
           >
             {i + 1}
@@ -88,7 +88,7 @@ export function SnapPagingDemo() {
 
       <div
         ref={containerRef}
-        className="relative overflow-hidden rounded-xl border-2 border-gray-200 dark:border-gray-700"
+        className="relative overflow-hidden rounded-xl border-2 border-fd-border"
         style={{ height: 300, cursor: "grab" }}
       >
         <div
@@ -127,7 +127,7 @@ export function SnapPagingDemo() {
           <div
             key={i}
             className={`h-2 w-2 rounded-full transition ${
-              i === currentPage ? "bg-gray-800 dark:bg-white" : "bg-gray-300 dark:bg-gray-600"
+              i === currentPage ? "bg-fd-foreground" : "bg-fd-border"
             }`}
           />
         ))}

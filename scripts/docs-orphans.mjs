@@ -2,13 +2,12 @@ import fs from "node:fs/promises";
 import path from "node:path";
 
 import pc from "picocolors";
-import { loadDot } from "../packages/panscale-config/dist/index.js";
+import { loadSite, siteDir } from "./site-config.mjs";
 
-const dot = loadDot();
-const cwd = process.cwd();
-const docsRoot = path.join(cwd, "apps", dot.project.id + "-site", "content", "docs");
+const site = await loadSite();
+const docsRoot = path.join(siteDir, "content", "docs");
 
-const allowlist = new Set([...dot.modules.map((m) => m.id), "index.mdx"]);
+const allowlist = new Set([...(site.sections.npm?.modules ?? []).map((m) => m.id), "index.mdx"]);
 
 let entries = [];
 try {
@@ -25,14 +24,5 @@ if (orphans.length === 0) {
 }
 
 const message = "Orphan doc directories detected: " + orphans.join(", ");
-if (dot.docs.orphanMode === "ignore") {
-  console.log(pc.yellow("docs-orphans ignored: " + message));
-  process.exit(0);
-}
-if (dot.docs.orphanMode === "warn") {
-  console.log(pc.yellow("docs-orphans warning: " + message));
-  process.exit(0);
-}
-
-console.error(pc.red("docs-orphans failed: " + message));
-process.exit(1);
+// The DOT's `docs.orphanMode` was "warn"; site.config has no such field, so orphans warn.
+console.log(pc.yellow("docs-orphans warning: " + message));

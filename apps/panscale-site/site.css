@@ -1,0 +1,23 @@
+/* The playground demos' own styles, after the theme: colours are the theme's tokens. */
+
+.btn-ctrl {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2rem;
+  height: 2rem;
+  padding: 0 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: 0.375rem;
+  border: 1px solid var(--color-fd-border);
+  background: var(--color-fd-card);
+  color: var(--color-fd-card-foreground);
+  cursor: pointer;
+  transition: background 0.15s;
+  user-select: none;
+}
+
+.btn-ctrl:hover {
+  background: var(--color-fd-muted);
+}

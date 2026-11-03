@@ -1,0 +1,33 @@
+---
+title: Panscale
+description: Pan/zoom/scroll transformation library for any JS runtime.
+---
+
+import { HomeHero } from "../../components/home-hero";
+import { FeatureGrid } from "../../components/feature-grid";
+import { PackageCards } from "../../components/package-cards";
+
+<HomeHero />
+
+<FeatureGrid />
+
+## Packages
+
+<PackageCards />
+
+## Quick start
+
+```ts
+import { createWebScaler } from "@panscale/web";
+
+const scaler = createWebScaler(element, {
+  contentWidth: 1600,
+  contentHeight: 900,
+  zooming: true,
+  bouncing: true,
+  callback: (values) => {
+    content.style.transform =
+      `matrix(${values.zoom},0,0,${values.zoom},${values.translateX},${values.translateY})`;
+  },
+});
+```

@@ -1,0 +1,9 @@
+.vercel
+# Written by `agentvibes-site prepare` (app/ carries its own generated .gitignore).
+next-env.d.ts
+next.config.mjs
+source.config.ts
+postcss.config.mjs
+proxy.ts
+instrumentation.ts
+tsconfig.tsbuildinfo

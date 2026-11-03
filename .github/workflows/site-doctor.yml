@@ -1,0 +1,41 @@
+name: Site doctor
+
+# The Site Factory site doctor (@byoklab/site-doctor) on the build output of
+# apps/panscale-site. Called by CI on every pull request and by Deploy Site
+# before the deploy: red here stops the deploy.
+#
+# On the build output, not on a Vercel preview: the panscale-site Vercel
+# project has no "Protection Bypass for Automation" secret, so a preview behind
+# its SSO protection cannot be fetched by the doctor.
+on:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  doctor:
+    # 24.04, not ubuntu-latest: site-doctor pins playwright-core 1.59.1, which
+    # cannot install Chromium on 26.04.
+    runs-on: ubuntu-24.04
+    env:
+      # .npmrc reads it for the private @byoklab/* packages (Gitea registry).
+      GITEA_REGISTRY_TOKEN: ${{ secrets.GITEA_REGISTRY_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm -r build
+      - name: Install Chromium for the doctor
+        working-directory: apps/panscale-site
+        run: node "$(realpath node_modules/@byoklab/site-doctor)/../../playwright-core/cli.js" install --with-deps --no-shell chromium
+      # A docs site: no app mode and no videos, so app-manifest and
+      # media-playable skip. No preset (the public theme) lists no internal
+      # names, so no-internal-leak skips too and is not required.
+      - name: Doctor on panscale-site
+        working-directory: apps/panscale-site
+        run: pnpm exec site-doctor check --next . --site . --browser launch --max-pages 200 --require theme-tokens,indexing,telemetry-prod-only,errors-captured,viewport,fonts-coverage,diagrams

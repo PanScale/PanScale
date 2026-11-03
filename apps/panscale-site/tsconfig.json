@@ -7,13 +7,8 @@
     "moduleResolution": "Bundler",
     "allowJs": false,
     "noEmit": true,
-    "types": ["node"],
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["./*"],
-      "fumadocs-mdx:collections/server": ["./.source/server.ts"]
-    }
+    "types": ["node"]
   },
-  "include": ["app", "components", "content", "lib", "mdx-components.tsx", "source.config.ts", "next-env.d.ts", ".source"],
+  "include": ["site.config.ts", "app", "components", "proxy.ts", "source.config.ts", "next-env.d.ts", ".source"],
   "exclude": ["node_modules"]
 }

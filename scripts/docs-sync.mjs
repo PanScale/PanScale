@@ -2,15 +2,15 @@ import fs from "node:fs/promises";
 import path from "node:path";
 
 import pc from "picocolors";
-import { loadDot } from "../packages/panscale-config/dist/index.js";
+import { loadSite } from "./site-config.mjs";
 
-const dot = loadDot();
+const site = await loadSite();
 const cwd = process.cwd();
 
 const requiredFiles = ["index.mdx", "getting-started.mdx", "api.mdx"];
 
 let created = 0;
-for (const mod of dot.modules) {
+for (const mod of site.sections.npm?.modules ?? []) {
   const docsDir = path.join(cwd, mod.folder.docsDir);
   await fs.mkdir(docsDir, { recursive: true });
 

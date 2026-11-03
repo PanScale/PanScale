@@ -217,7 +217,7 @@ export function ImageViewerDemo() {
   return (
     <section>
       <h2 className="mb-2 text-lg font-semibold">Image Viewer</h2>
-      <p className="mb-3 text-sm text-gray-500 dark:text-gray-400">
+      <p className="mb-3 text-sm text-fd-muted-foreground">
         Different aspect ratios with Fit/Fill modes. Drag to pan, scroll to zoom, pinch on touch.
       </p>
 
@@ -230,8 +230,8 @@ export function ImageViewerDemo() {
             type="button"
             className={`rounded-md px-3 py-1.5 text-sm font-medium transition ${
               i === imageIdx
-                ? "bg-blue-600 text-white"
-                : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600"
+                ? "bg-fd-primary text-fd-primary-foreground"
+                : "border border-fd-border bg-fd-card text-fd-card-foreground hover:bg-fd-muted"
             }`}
           >
             {si.label}
@@ -246,8 +246,8 @@ export function ImageViewerDemo() {
           type="button"
           className={`rounded-md px-3 py-1.5 text-sm font-medium transition ${
             fitMode === "fit"
-              ? "bg-indigo-600 text-white"
-              : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600"
+              ? "bg-fd-primary text-fd-primary-foreground"
+              : "border border-fd-border bg-fd-card text-fd-card-foreground hover:bg-fd-muted"
           }`}
         >
           Fit
@@ -257,26 +257,26 @@ export function ImageViewerDemo() {
           type="button"
           className={`rounded-md px-3 py-1.5 text-sm font-medium transition ${
             fitMode === "fill"
-              ? "bg-indigo-600 text-white"
-              : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600"
+              ? "bg-fd-primary text-fd-primary-foreground"
+              : "border border-fd-border bg-fd-card text-fd-card-foreground hover:bg-fd-muted"
           }`}
         >
           Fill
         </button>
-        <div className="mx-2 h-6 w-px bg-gray-300 dark:bg-gray-600" />
+        <div className="mx-2 h-6 w-px bg-fd-border" />
         <button onClick={zoomOut} type="button" className="btn-ctrl">−</button>
         <span className="min-w-[4rem] text-center text-sm font-mono">
           {Math.round(zoom * 100)}%
         </span>
         <button onClick={zoomIn} type="button" className="btn-ctrl">+</button>
         <button onClick={reset1to1} type="button" className="btn-ctrl">1:1</button>
-        <div className="mx-2 h-6 w-px bg-gray-300 dark:bg-gray-600" />
+        <div className="mx-2 h-6 w-px bg-fd-border" />
         <label className="flex items-center gap-1.5 text-sm cursor-pointer select-none">
           <input
             type="checkbox"
             checked={physics}
             onChange={(e) => setPhysics(e.target.checked)}
-            className="accent-indigo-500"
+            className="accent-fd-primary"
           />
           Physics
         </label>
@@ -285,7 +285,7 @@ export function ImageViewerDemo() {
             type="checkbox"
             checked={forceCenter}
             onChange={(e) => setForceCenter(e.target.checked)}
-            className="accent-indigo-500"
+            className="accent-fd-primary"
           />
           Center
         </label>
@@ -303,8 +303,9 @@ export function ImageViewerDemo() {
       {/* Viewer */}
       <div
         ref={containerRef}
-        className="relative overflow-hidden rounded-xl border-2 border-gray-200 bg-[#1a1a2e] dark:border-gray-700"
-        style={{ height: 500, cursor: "grab" }}
+        className="relative overflow-hidden rounded-xl border-2 border-fd-border"
+        // The stage behind the image is demo content (a dark pad, like the card colours), not site chrome.
+        style={{ height: 500, cursor: "grab", backgroundColor: "#1a1a2e" }}
       >
         {/* Checkerboard background pattern */}
         <div
@@ -417,7 +418,7 @@ export function ImageViewerDemo() {
 
       {/* Info bar */}
       {values && (
-        <div className="mt-2 rounded-lg border border-gray-200 bg-white px-4 py-2 font-mono text-xs dark:border-gray-700 dark:bg-gray-900">
+        <div className="mt-2 rounded-lg border border-fd-border bg-fd-card px-4 py-2 font-mono text-xs text-fd-card-foreground">
           <span className="mr-4">Image: {img.w}×{img.h}</span>
           <span className="mr-4">Zoom: {(zoom * 100).toFixed(0)}%</span>
           <span className="mr-4">Scroll: ({values.scrollLeft.toFixed(0)}, {values.scrollTop.toFixed(0)})</span>

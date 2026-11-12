@@ -21,7 +21,10 @@ jobs:
           cache: pnpm
       - run: pnpm install
       - run: pnpm -r check
+      - run: pnpm -r --if-present test
       # The root check (guardrails verify-diff + the pack/docs/changeset scripts).
       # `pnpm -r` does not include the workspace root, so without this step the
       # gate never ran in CI (is-1498dfaf).
+      # `guardrails verify-diff` runs ast-grep on the added lines of .ts/.tsx files.
+      - run: npm install -g @ast-grep/cli@0.45.2
       - run: pnpm check

@@ -97,6 +97,14 @@ export class Scaler {
     this.clampAndPublish();
   }
 
+  /**
+   * Change the content size, keeping the viewport size and the current
+   * zoom. The scroll position is clamped to the new content bounds.
+   */
+  setContentSize(contentWidth: number, contentHeight: number): void {
+    this.setDimensions(this.dimensions.clientWidth, this.dimensions.clientHeight, contentWidth, contentHeight);
+  }
+
   /** Set element position in the document. */
   setPosition(left: number, top: number): void {
     this.position = { left, top };

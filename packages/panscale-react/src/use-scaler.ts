@@ -61,6 +61,16 @@ export function useScaler(options?: UseScalerOptions): UseScalerReturn {
     };
   }, []);
 
+  // A changed contentWidth/contentHeight option reaches the live scaler, not only
+  // the one given at mount. The mount effect above runs first and already used
+  // the initial values, so the first run of this effect repeats them harmlessly.
+  const contentWidthOption = options?.contentWidth;
+  const contentHeightOption = options?.contentHeight;
+  useEffect(() => {
+    if (contentWidthOption === undefined || contentHeightOption === undefined) return;
+    webScalerRef.current?.updateContentSize(contentWidthOption, contentHeightOption);
+  }, [contentWidthOption, contentHeightOption]);
+
   const scrollTo = useCallback((left: number, top: number, animate?: boolean) => {
     webScalerRef.current?.scaler.scrollTo(left, top, animate);
   }, []);

@@ -41,6 +41,12 @@ export function ScalerView({
     scalerRef.current?.setDimensions(width, height, contentWidth, contentHeight);
   }, [contentWidth, contentHeight]);
 
+  // onLayout fires on layout changes only. A new contentWidth/contentHeight
+  // reaches the scaler here, keeping the viewport size from the last layout.
+  useEffect(() => {
+    scalerRef.current?.setContentSize(contentWidth, contentHeight);
+  }, [contentWidth, contentHeight]);
+
   useEffect(() => {
     return () => {
       scalerRef.current?.destroy();

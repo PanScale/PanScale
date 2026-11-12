@@ -23,11 +23,16 @@ export function createWebScaler(element: HTMLElement, options: WebScalerOptions)
   const { callback, contentWidth, contentHeight, doubleTapZoom, onResize, ...scalerOptions } = options;
   const scaler = new Scaler(callback, { zooming: true, ...scalerOptions });
 
+  // The content size the resize handler reads. updateContentSize() replaces it,
+  // so a later resize keeps the new size instead of the one given at creation.
+  let explicitWidth = contentWidth;
+  let explicitHeight = contentHeight;
+
   function updateDimensions() {
     const rect = element.getBoundingClientRect();
     scaler.setPosition(rect.left + window.scrollX, rect.top + window.scrollY);
-    const cw = contentWidth ?? element.scrollWidth;
-    const ch = contentHeight ?? element.scrollHeight;
+    const cw = explicitWidth ?? element.scrollWidth;
+    const ch = explicitHeight ?? element.scrollHeight;
     scaler.setDimensions(rect.width, rect.height, cw, ch);
   }
 
@@ -53,9 +58,9 @@ export function createWebScaler(element: HTMLElement, options: WebScalerOptions)
   return {
     scaler,
     updateContentSize(w: number, h: number) {
-      const rect = element.getBoundingClientRect();
-      scaler.setPosition(rect.left + window.scrollX, rect.top + window.scrollY);
-      scaler.setDimensions(rect.width, rect.height, w, h);
+      explicitWidth = w;
+      explicitHeight = h;
+      updateDimensions();
     },
     destroy() {
       cleanupPointer();

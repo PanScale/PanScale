@@ -42,6 +42,7 @@ afterEach(() => {
 function setup(contentWidth: number, contentHeight: number) {
   let last: ScalerValues | null = null;
   const element = new FakeElement();
+  // ast-grep-ignore: as-any-escape -- the test runs in node, so FakeElement stands in for the DOM element the adapter reads
   const web = createWebScaler(element as unknown as HTMLElement, {
     callback: (v) => {
       last = v;

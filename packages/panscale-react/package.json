@@ -3,7 +3,9 @@
   "version": "0.3.0",
   "type": "module",
   "license": "MIT",
-  "engines": { "node": ">=20" },
+  "engines": {
+    "node": ">=20"
+  },
   "types": "./dist/index.d.ts",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -14,7 +16,10 @@
       "default": "./dist/index.js"
     }
   },
-  "files": ["dist", "README.md"],
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "scripts": {
     "build": "tsdown",
     "check": "pnpm build && publint && attw --pack . --ignore-rules cjs-resolves-to-esm"
@@ -34,5 +39,10 @@
     "tsdown": "^0.10.2",
     "transformation-matrix": "^3.0.0",
     "typescript": "^5.7.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PanScale/PanScale.git",
+    "directory": "packages/panscale-react"
   }
 }

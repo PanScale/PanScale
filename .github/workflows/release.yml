@@ -5,6 +5,11 @@ on:
     branches: [main]
   workflow_dispatch:
 
+permissions:
+  contents: write       # changesets/action pushes the changeset-release/main branch and tags
+  pull-requests: write  # ... and opens the Version Packages PR
+  id-token: write       # npm provenance
+
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -25,3 +30,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_PROVENANCE: "true"

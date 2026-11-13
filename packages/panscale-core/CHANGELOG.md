@@ -1,5 +1,11 @@
 # @panscale/core
 
+## 0.3.2
+
+### Patch Changes
+
+- [#8](https://github.com/PanScale/PanScale/pull/8) [`5760096`](https://github.com/PanScale/PanScale/commit/5760096d254d0c3343adc39ed864faab6e9ab3ae) Thanks [@byoklab](https://github.com/byoklab)! - Publish with the built `dist/` folder. 0.3.1 was published without it, so it cannot be used; this release has the same code as 0.3.1 and the package contents of 0.3.0.
+
 ## 0.3.1
 
 ### Patch Changes

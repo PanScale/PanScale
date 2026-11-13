@@ -22,7 +22,8 @@
   ],
   "scripts": {
     "build": "tsdown",
-    "check": "pnpm build && publint && attw --pack . --ignore-rules cjs-resolves-to-esm"
+    "check": "pnpm build && publint && attw --pack . --ignore-rules cjs-resolves-to-esm",
+    "prepack": "pnpm build && test -f dist/index.js"
   },
   "peerDependencies": {
     "@panscale/core": "workspace:*",

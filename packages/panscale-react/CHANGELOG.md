@@ -1,5 +1,13 @@
 # @panscale/react
 
+## 1.0.0
+
+### Patch Changes
+
+- Updated dependencies [[`84cf572`](https://github.com/PanScale/PanScale/commit/84cf5726f3e650d0a4e8ec8f2910297b76656c3b)]:
+  - @panscale/core@0.4.0
+  - @panscale/web@1.0.0
+
 ## 0.3.2
 
 ### Patch Changes

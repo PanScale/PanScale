@@ -8,6 +8,8 @@ export type {
   PullToRefreshState,
   Dimensions,
   Position,
-  SnapSize
+  SnapSize,
+  ScrollBoundsPolicy,
+  ScrollView
 } from "./types";
 export { DEFAULT_OPTIONS } from "./options";

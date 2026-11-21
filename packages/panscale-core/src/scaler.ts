@@ -17,7 +17,8 @@ import type {
   PullToRefreshCallbacks,
   Dimensions,
   Position,
-  SnapSize
+  SnapSize,
+  ScrollView
 } from "./types";
 import { mergeOptions } from "./options";
 import { getAnimationProvider } from "./animation";
@@ -79,6 +80,10 @@ export class Scaler {
   private animDuration = 250;
 
   private destroyed = false;
+
+  // Where the view was after the last bounded move (or at the start of a gesture): what the
+  // keepVisible bounds measure a move against.
+  private settledView: ScrollView | null = null;
 
   private zoomMin: number;
   private zoomMax: number;
@@ -209,6 +214,7 @@ export class Scaler {
     this.initialScrollLeft = scrollLeft;
     this.initialScrollTop = scrollTop;
     this.initialZoom = this.getCurrentZoom();
+    this.settledView = this.getDecomposed();
 
     if (touches.length === 1) {
       const t = touches[0]!;
@@ -307,7 +313,7 @@ export class Scaler {
     }
 
     // Bouncing: allow over-scroll with resistance
-    const bounds = getScrollBounds(this.dimensions, this.getCurrentZoom());
+    const bounds = this.scrollBounds();
     if (this.options.bouncing) {
       if (newScrollLeft < bounds.minScrollLeft) {
         newScrollLeft = bounds.minScrollLeft + (newScrollLeft - bounds.minScrollLeft) * 0.5;
@@ -349,7 +355,7 @@ export class Scaler {
     // Calculate velocity
     const { velocityX, velocityY } = this.calculateVelocity(timeStamp);
     const { scrollLeft, scrollTop } = this.getDecomposed();
-    const bounds = getScrollBounds(this.dimensions, this.getCurrentZoom());
+    const bounds = this.scrollBounds();
 
     // Check if we need to bounce back
     const needsBounceX = scrollLeft < bounds.minScrollLeft || scrollLeft > bounds.maxScrollLeft;
@@ -470,11 +476,29 @@ export class Scaler {
     return clamp(zoom, this.zoomMin, this.zoomMax);
   }
 
+  /** The scroll bounds at the current zoom, measured against where the view last settled. */
+  private scrollBounds() {
+    return getScrollBounds(
+      this.dimensions,
+      this.getCurrentZoom(),
+      this.options.bounds,
+      this.settledView ?? undefined
+    );
+  }
+
   private clampAndPublish(): void {
     const { scrollLeft, scrollTop } = this.getDecomposed();
     const zoom = this.getCurrentZoom();
-    const clamped = clampScroll(scrollLeft, scrollTop, this.dimensions, zoom);
+    const clamped = clampScroll(
+      scrollLeft,
+      scrollTop,
+      this.dimensions,
+      zoom,
+      this.options.bounds,
+      this.settledView ?? undefined
+    );
     this.setScrollPosition(clamped.scrollLeft, clamped.scrollTop);
+    this.settledView = this.getDecomposed();
     this.publish();
   }
 
@@ -513,7 +537,7 @@ export class Scaler {
         let newScrollLeft = scrollLeft + deltaX;
         let newScrollTop = scrollTop + deltaY;
 
-        const bounds = getScrollBounds(this.dimensions, this.getCurrentZoom());
+        const bounds = this.scrollBounds();
 
         // Check bounds — if exceeded, start bounce
         if (newScrollLeft < bounds.minScrollLeft || newScrollLeft > bounds.maxScrollLeft ||
@@ -530,6 +554,7 @@ export class Scaler {
         }
 
         this.setScrollPosition(newScrollLeft, newScrollTop);
+        this.settledView = this.getDecomposed();
         this.publish();
         needsFrame = this.momentum.active;
       }

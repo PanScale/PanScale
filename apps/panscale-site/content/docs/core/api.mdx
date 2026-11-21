@@ -64,6 +64,8 @@ interface ScalerOptions {
   maxZoom: number;          // default: 3
   deceleration: number;     // default: 0.95
   animationProvider: AnimationProvider | null; // default: null (auto-detect)
+  bounds: ScrollBoundsPolicy; // default: { kind: "contain" }
+}| null; // default: null (auto-detect)
 }
 ```
 
@@ -81,5 +83,19 @@ To disable all physics and get direct 1:1 panning:
 new Scaler(callback, {
   animating: false,
   bouncing: false,
+});
+```
+
+### Scroll bounds
+
+`bounds` sets how far the scroll may go.
+
+- `{ kind: "contain" }` (default): content smaller than the viewport stays wholly inside it; content larger covers it. A wheel or pinch zoom near an edge is clamped, so the point under the cursor can slide.
+- `{ kind: "keepVisible", minVisible }`: the content may move past the viewport edges while at least `minVisible` pixels of it stay in view on each axis (never more than its own size on screen). A zoom keeps the point under the cursor or between the fingers first. A zoom out never takes content out of view, so it is never clamped. A pan, or a zoom in around a point off the content, that would leave less in view than `minVisible` (or than the view held before it) stops there: keeping content in view wins over the anchor.
+
+```ts
+new Scaler(callback, {
+  zooming: true,
+  bounds: { kind: "keepVisible", minVisible: 48 },
 });
 ```

@@ -12,7 +12,8 @@ export const DEFAULT_OPTIONS: ScalerOptions = {
   minZoom: 0.5,
   maxZoom: 3,
   deceleration: 0.95,
-  animationProvider: null
+  animationProvider: null,
+  bounds: { kind: "contain" }
 };
 
 export function mergeOptions(overrides?: Partial<ScalerOptions>): ScalerOptions {

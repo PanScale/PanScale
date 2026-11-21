@@ -33,6 +33,27 @@ export interface PullToRefreshCallbacks {
 /** Pull-to-refresh state machine states. */
 export type PullToRefreshState = "idle" | "pulling" | "active" | "refreshing";
 
+/**
+ * How far the scroll may go.
+ * - `contain` (the default): content smaller than the viewport stays wholly inside it, and content
+ *   larger covers it.
+ * - `keepVisible`: the content may move past the viewport's edges, as long as at least `minVisible`
+ *   pixels of it stay in the viewport on each axis (no more than the content's own size on screen). A zoom
+ *   around a point keeps the point first: what a zoom out leaves in view always counts as enough, so a
+ *   wheel or pinch out is never clamped. A pan, or a zoom in around a point off the content, that would
+ *   leave less in view than `minVisible` (or than the view held before it) stops there.
+ */
+export type ScrollBoundsPolicy =
+  | { kind: "contain" }
+  | { kind: "keepVisible"; minVisible: number };
+
+/** A scroll position and zoom: where the view was before a move, for the `keepVisible` bounds. */
+export interface ScrollView {
+  scrollLeft: number;
+  scrollTop: number;
+  zoom: number;
+}
+
 /** Configuration options for Scaler. */
 export interface ScalerOptions {
   scrollingX: boolean;
@@ -47,6 +68,8 @@ export interface ScalerOptions {
   maxZoom: number;
   deceleration: number;
   animationProvider: AnimationProvider | null;
+  /** How far the scroll may go; see {@link ScrollBoundsPolicy}. */
+  bounds: ScrollBoundsPolicy;
 }
 
 /** Dimensions of viewport and content. */

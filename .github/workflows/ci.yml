@@ -17,14 +17,15 @@ jobs:
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: pnpm
       - run: pnpm install
       - run: pnpm -r check
       - run: pnpm -r --if-present test
       # The root check (guardrails verify-diff + the pack/docs/changeset scripts).
       # `pnpm -r` does not include the workspace root, so without this step the
-      # gate never ran in CI (is-1498dfaf).
+      # gate never ran in CI.
       # `guardrails verify-diff` runs ast-grep on the added lines of .ts/.tsx files.
-      - run: npm install -g @ast-grep/cli@0.45.2
+      # guardrails doctor (also in the root check) needs biome on PATH.
+      - run: npm install -g @ast-grep/cli@0.45.2 @biomejs/biome@2.5.10
       - run: pnpm check

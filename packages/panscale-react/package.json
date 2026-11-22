@@ -1,6 +1,6 @@
 {
   "name": "@panscale/react",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "type": "module",
   "license": "MIT",
   "engines": {
@@ -26,8 +26,8 @@
     "prepack": "pnpm build && test -f dist/index.js"
   },
   "peerDependencies": {
-    "@panscale/core": "workspace:*",
-    "@panscale/web": "workspace:*",
+    "@panscale/core": "^0.3.2 || ^0.4.0",
+    "@panscale/web": "^0.3.2 || ^0.4.0",
     "react": "^18.0.0 || ^19.0.0"
   },
   "devDependencies": {

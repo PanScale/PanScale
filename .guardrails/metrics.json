@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "updatedAt": "2026-11-22T10:15:52.260Z",
+  "commit": "2f8bfc5497e7bdfc2433b9873c883f92efedf31e",
+  "gated": {
+    "p90ComponentLoc": 169,
+    "useStateDensity": 0.8333,
+    "inlineMapRowCount": 0,
+    "p90ContextCost": 8,
+    "runInActionCount": 0,
+    "asyncInStore": 0,
+    "newMapInStore": 0,
+    "reactionsTotal": 0,
+    "loadingBooleanShapes": 0
+  },
+  "observed": {
+    "componentCount": 18,
+    "fileCount": 58,
+    "p50ComponentLoc": 43,
+    "maxComponentLoc": 374,
+    "pctComponentsLe80": 66.7,
+    "observerWrappedPct": 0,
+    "hooksTotal": {
+      "useState": 15,
+      "useEffect": 12,
+      "useMemo": 0,
+      "useCallback": 13,
+      "useRef": 19
+    },
+    "avgPropsCount": 2.2222,
+    "maxJsxDepth": 7,
+    "exhaustiveRatio": null,
+    "matchSites": 0,
+    "otherwiseCount": 0,
+    "ternaryInJsxCount": 7,
+    "andInJsxCount": 7,
+    "p50FileSloc": 20,
+    "p90ContextCostObserved": 8
+  }
+}

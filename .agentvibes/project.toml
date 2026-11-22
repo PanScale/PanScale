@@ -1,2 +1,10 @@
 projectId = "panscale"
 name      = "PanScale"
+
+[stack]
+# detected from: panscale-site
+platform = "next-client"                # vite-spa | expo | next-client | next-ssr
+state = "none"                      # mobx | none
+storeRuntime = "none"        # client-singleton | request-scoped | none
+styling = "tailwind"                  # theme-inline | tailwind | nativewind
+componentModel = "conventional"    # two-tier | conventional

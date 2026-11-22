@@ -1,5 +1,11 @@
 # @panscale/web
 
+## 0.4.0
+
+### Minor Changes
+
+- [#10](https://github.com/PanScale/PanScale/pull/10) [`84cf572`](https://github.com/PanScale/PanScale/commit/84cf5726f3e650d0a4e8ec8f2910297b76656c3b) Thanks [@byoklab](https://github.com/byoklab)! - New opt-in `bounds` option: `{ kind: "keepVisible", minVisible }` lets the content move past the viewport edges while at least `minVisible` pixels stay in view. A wheel or pinch zoom stays anchored on the point under the cursor; a zoom out is never clamped, and a pan or zoom in that would hide the content stops with `minVisible` pixels left. The default, `{ kind: "contain" }`, is unchanged.
+
 ## 0.3.2
 
 ### Patch Changes

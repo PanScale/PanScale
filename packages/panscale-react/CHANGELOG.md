@@ -1,5 +1,11 @@
 # @panscale/react
 
+## 0.3.3
+
+### Patch Changes
+
+- Peer dependencies on other `@panscale` packages are now version ranges, not one exact version: `@panscale/react` and `@panscale/react-native` accept `@panscale/core` 0.3 and 0.4 (and `@panscale/react` accepts `@panscale/web` 0.3 and 0.4). `@panscale/web` 0.4 needs `@panscale/core` 0.4, which has the `bounds` option it passes through.
+
 ## 0.3.2
 
 ### Patch Changes

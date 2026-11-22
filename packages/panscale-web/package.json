@@ -1,6 +1,6 @@
 {
   "name": "@panscale/web",
-  "version": "0.3.2",
+  "version": "0.4.0",
   "type": "module",
   "license": "MIT",
   "engines": {
@@ -27,7 +27,7 @@
     "prepack": "pnpm build && test -f dist/index.js"
   },
   "peerDependencies": {
-    "@panscale/core": "workspace:*",
+    "@panscale/core": "^0.4.0",
     "transformation-matrix": "^3.0.0"
   },
   "devDependencies": {

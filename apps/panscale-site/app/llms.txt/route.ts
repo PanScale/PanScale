@@ -1,5 +1,8 @@
 import { dot } from "@panscale/config";
 
+// Static export: written to out/llms.txt at build time.
+export const dynamic = "force-static";
+
 export function GET() {
   const base = dot.project.links.github.state === "configured" ? "" : "";
 

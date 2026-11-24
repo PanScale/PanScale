@@ -9,8 +9,9 @@
   "scripts": {
     "dev": "next dev --port ${PORT:-7780}",
     "build": "next build",
-    "start": "next start --port ${PORT:-7780}",
-    "check": "next build"
+    "start": "wrangler dev --port ${PORT:-7780}",
+    "check": "next build",
+    "deploy:cloudflare": "wrangler deploy"
   },
   "dependencies": {
     "@panscale/config": "workspace:*",
@@ -33,6 +34,7 @@
     "@types/node": "^22.10.2",
     "@types/react": "^19.0.0",
     "postcss": "^8.4.47",
-    "tailwindcss": "^4.0.0"
+    "tailwindcss": "^4.0.0",
+    "wrangler": "4.162.0"
   }
 }

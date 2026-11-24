@@ -4,6 +4,13 @@ import { createRelativeLink } from "fumadocs-ui/mdx";
 import { getMDXComponents } from "@/mdx-components";
 import { source } from "@/lib/source";
 
+// Static export: every docs page is rendered at build time, anything else is a 404.
+export const dynamicParams = false;
+
+export function generateStaticParams() {
+  return source.generateParams();
+}
+
 type Params = {
   params: Promise<{ slug?: string[] }>;
 };
